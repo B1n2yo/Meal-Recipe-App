@@ -3,7 +3,6 @@ package data_access;
 import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
-import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
 import use_case.weekly_diet.WeeklyDietDataAccessInterface;
@@ -12,7 +11,7 @@ import java.io.File;
 import java.io.*;
 import java.util.*;
 
-public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserDataAccessInterface, SignupUserDataAccessInterface, WeeklyDietDataAccessInterface {
+public class DataAccessObject implements LoginUserDataAccessInterface, SignupUserDataAccessInterface, WeeklyDietDataAccessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -81,9 +80,8 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
             return Float.parseFloat(String.valueOf(655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)));
         }
     }
-    @Override
-    public float get(UserProfile user) {
-        return user.getWeight();
+    public UserProfile get(String username) {
+        return accounts.get(username);
     }
 
     @Override
@@ -106,51 +104,11 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
 
     @Override
     public void saveRecipe(MealInfo recipe, UserProfile userProfile) {
-        if (csvFile.length() == 0) {
-            this.save();
-        } else {
-            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
-                String header = reader.readLine();
-                String row;
-                while ((row = reader.readLine()) != null) {
-                    String[] col = row.split(",");
-                    String username = String.valueOf(col[headers.get("username")]);
-                    if (username.equals(userProfile.getUsername())) {
-                        col[headers.get("recipes")] += recipe + ",";
-                    }
-                }
-                this.save();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } ;
-        }
+
     }
 
     @Override
     public boolean recipeSaved(MealInfo recipe, UserProfile userProfile) {
-        if (csvFile.length() == 0) {
-            this.save();
-        } else {
-            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
-                String header = reader.readLine();
-                String row;
-                while ((row = reader.readLine()) != null) {
-                    String[] col = row.split(",");
-                    String username = String.valueOf(col[headers.get("username")]);
-                    if (username.equals(userProfile.getUsername())) {
-                        String[] recipes = col[headers.get("recipes")].split(",");
-                        for (String r : recipes) {
-                            if (r.contentEquals(recipe.toString())) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                this.save();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } ;
-        }
         return false;
     }
 
@@ -162,7 +120,6 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
             writer.newLine();
 
             for (UserProfile user : accounts.values()) {
-                String stringDietaryRestriction = "";
                 String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         user.getUsername(), user.getPassword(), user.getGender(), String.valueOf(user.getWeight()),
                         String.valueOf(user.getHeight()), String.valueOf(user.getAge()),

@@ -62,7 +62,7 @@ public class Main {
                 userDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, signupViewModel,
         userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
@@ -77,7 +77,7 @@ public class Main {
         LoggedInView loggedInView = new LoggedInView(weeklyDietController, loggedInViewModel, logoutController);
         views.add(loggedInView, loggedInView.viewName);
 
-        viewManagerModel.setActiveView(signupView.viewName);
+        viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();
