@@ -50,6 +50,7 @@ public class EdamamAPICall {
     private static Dictionary<String, ArrayList<String>> filterResponseBody(String responseBody) {
         Dictionary<String, ArrayList<String>> recipeInfo = new Hashtable<>();
         JSONObject jsonObject = JSONObject.parseObject(responseBody);
+        System.out.println(responseBody);
         JSONArray hits = jsonObject.getJSONArray("hits");
         for (int i = 0; i < hits.size(); i++) {
             JSONObject hit = hits.getJSONObject(i);

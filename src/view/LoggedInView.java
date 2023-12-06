@@ -56,15 +56,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             recipes = new JDialog();
                             ArrayList<MealInfo> weeklyDiet = currentState.getMealPlan();
                             for (int i = 0; i < weeklyDiet.size(); i++) {
-                                MealInfo meal = weeklyDiet.get(i);
-                                JLabel recipeName = new JLabel(meal.getName());
-                                JLabel recipeDescription = new JLabel(meal.getDescription());
-                                JLabel recipeCals = new JLabel(Float.toString(meal.getCalories()));
-                                JPanel recipe = new JPanel();
-                                recipe.setLayout(new BoxLayout(recipe, BoxLayout.Y_AXIS));
-                                recipe.add(recipeName);
-                                recipe.add(recipeDescription);
-                                recipe.add(recipeCals);
+                                JLabel recipe = new JLabel(weeklyDiet.get(i).toString());
                                 recipes.add(recipe);
                             }
                             recipes.setVisible(true);

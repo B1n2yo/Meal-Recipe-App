@@ -38,7 +38,6 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
         float weight = userProfile.getWeight();
         ArrayList<String> dietaryRestrictions = userProfile.getDietaryRestrictions();
         float dailyCals = userProfile.getRecommendedDailyCalories();
-        System.out.println(dailyCals);
         double breakfastCals = 0.25 * dailyCals;
         double lunchCals = 0.35 * dailyCals;
         double dinnerCals = 0.4 * dailyCals;
@@ -61,8 +60,8 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
             query.put("mealType", mealType.get(mealTypeInt));
             String calories = mealTypeCals.get(mealTypeInt) - 0.1 * mealTypeCals.get(mealTypeInt) + "-" +
                     (mealTypeCals.get(mealTypeInt) + 0.1 * mealTypeCals.get(mealTypeInt));
-            query.put("calories", calories);
             System.out.println(calories);
+            query.put("calories", calories);
 
             Dictionary<String, ArrayList<String>> result = new Hashtable<>();
             try {
@@ -81,7 +80,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
 
             MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)));
 
-            if (!weeklyDietDataAccessObject.recipeSaved(recipe.getName(), userProfile)) {
+            if (!weeklyDietDataAccessObject.recipeSaved(recipe, userProfile)) {
                 if (mealTypeInt < 3) {
                     mealTypeInt++;
                 }
@@ -89,7 +88,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
                     mealTypeInt = 1;
                 }
                 weeklyDiet.add(recipe);
-                weeklyDietDataAccessObject.saveRecipe(recipe.getName(), userProfile);
+                weeklyDietDataAccessObject.saveRecipe(recipe, userProfile);
             }
 
         } while (weeklyDiet.size() < 21);
