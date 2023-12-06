@@ -188,6 +188,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                             "\"height_cm\" : \"" + user.getHeight() + "\",\n" +
                             "\"age\" : \"" + user.getAge() + "\"\n" +
                             "}";
+            System.out.println(query);
             OkHttpClient client = new OkHttpClient();
             MediaType mediaType = MediaType.parse("application/json");
             RequestBody body = RequestBody.create(mediaType, query);
@@ -198,9 +199,9 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     .addHeader("x-app-id", "a850fd03")
                     .addHeader("x-app-key", "67f8395ca094e8e9fdeee99729678c18")
                     .build();
-
             Response response = client.newCall(request).execute();
-            System.out.println(response.code());
+            System.out.println(request);
+//            System.out.println(response);
             if (response.code() == 200) {
 
                 // This is the string representation of the response body (looks exactly like a JSON file).
@@ -214,6 +215,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     return new ExerciseData(data.getString("user_input"), data.getInt("duration_min"), data.getInt("nf_calories"));
                 }
             }
+            System.out.println("Response Error: " + response.code());
             return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
