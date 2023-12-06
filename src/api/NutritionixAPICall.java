@@ -45,6 +45,8 @@ public class NutritionixAPICall {
                     .build();
 
             Response response = client.newCall(request).execute();
+            System.out.println(request);
+//            System.out.println(response);
             System.out.println(response.code());
             if (response.code() == 200) {
 
