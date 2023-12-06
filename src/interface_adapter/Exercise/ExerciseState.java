@@ -1,30 +1,51 @@
 package interface_adapter.Exercise;
 
 public class ExerciseState {
-    private String exerciseType = "";
-    private float duration = 0;
+
+    private String username = "";
+    private String exerciseName = "";
+
+    private int duration = 0;
+
+    private int caloriesBurned = 0;
 
     public ExerciseState(ExerciseState copy) {
-        exerciseType = copy.exerciseType;
-        duration = copy.duration;
+        exerciseName = copy.exerciseName;
     }
 
     public ExerciseState() {
     }
 
-    public String getExerciseType() {
-        return exerciseType;
+    public String getUsername() {
+        return username;
     }
-    public float getDuration() {
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public int getDuration() {
         return duration;
     }
 
-    public void setExerciseType(String exerciseType) {
-        this.exerciseType = exerciseType;
-    }
-
-    public void setDuration(float duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    public int getCaloriesBurned() {
+        return caloriesBurned;
+    }
+
+    public void setCaloriesBurned(int caloriesBurned) {
+        this.caloriesBurned = caloriesBurned;
+    }
 }
