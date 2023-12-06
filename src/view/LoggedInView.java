@@ -1,5 +1,8 @@
 package view;
 
+import entity.MealInfo;
+import interface_adapter.Login.LoginState;
+import interface_adapter.Logout.LogoutController;
 import interface_adapter.WeeklyDietController;
 import interface_adapter.Logged_in.LoggedInState;
 import interface_adapter.Logged_in.LoggedInViewModel;
@@ -12,111 +15,62 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "logged in";
 
     private final LoggedInViewModel loggedInViewModel;
     private final WeeklyDietController weeklyDietController;
+    private final LogoutController logoutController;
 
     private final JButton getRecipes;
     private final JButton logOut;
+    private JDialog recipes;
 
-    public LoggedInView(WeeklyDietController controller, LoggedInViewModel loggedInViewModel) {
+    public LoggedInView(WeeklyDietController controller, LoggedInViewModel loggedInViewModel,
+                        LogoutController logoutController) {
 
         this.weeklyDietController = controller;
         this.loggedInViewModel = loggedInViewModel;
         loggedInViewModel.addPropertyChangeListener(this);
+        this.logoutController = logoutController;
 
         JLabel title = new JLabel(loggedInViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        LabelTextPanel usernameInfo = new LabelTextPanel(
-                new JLabel(signupViewModel.USERNAME_LABEL), usernameInputField);
-        LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel(signupViewModel.PASSWORD_LABEL), passwordInputField);
-        LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
-                new JLabel(signupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
-
         JPanel buttons = new JPanel();
-        signUp = new JButton(signupViewModel.SIGNUP_BUTTON_LABEL);
-        buttons.add(signUp);
-        cancel = new JButton(signupViewModel.CANCEL_BUTTON_LABEL);
-        buttons.add(cancel);
+        getRecipes = new JButton(loggedInViewModel.GET_RECIPES_BUTTON_LABEL);
+        buttons.add(getRecipes);
+        logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
+        buttons.add(logOut);
 
-        signUp.addActionListener(
+        getRecipes.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(signUp)) {
-                            SignupState currentState = signupViewModel.getState();
-                            String username = currentState.getUsername();
-                            String password = currentState.getPassword();
-                            String repeatPassword = currentState.getRepeatPassword();
+                        if (evt.getSource().equals(getRecipes)) {
+                            LoggedInState currentState = loggedInViewModel.getState();
+                            weeklyDietController.execute(currentState.getUsername());
 
-                            signupController.execute(username, password, repeatPassword);
+                            recipes = new JDialog();
+                            ArrayList<MealInfo> weeklyDiet = currentState.getMealPlan();
+                            for (int i = 0; i < weeklyDiet.size(); i++) {
+                                JLabel recipe = new JLabel(weeklyDiet.get(i).toString());
+                                recipes.add(recipe);
+                            }
+                            recipes.setVisible(true);
                         }
                     }
                 }
         );
-        cancel.addActionListener(this);
-
-        // This makes a new KeyListener implementing class, instantiates it, and
-        // makes it listen to keystrokes in the usernameInputField.
-        //
-        // Notice how it has access to instance variables in the enclosing class!
-        usernameInputField.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        SignupState currentState = signupViewModel.getState();
-                        currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
-                        signupViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                    }
-                });
-
-        passwordInputField.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        SignupState currentState = signupViewModel.getState();
-                        currentState.setPassword(passwordInputField.getText() + e.getKeyChar());
-                        signupViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                    }
-                }
-        );
-
-        repeatPasswordInputField.addKeyListener(
-                new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        SignupState currentState = signupViewModel.getState();
-                        currentState.setRepeatPassword(repeatPasswordInputField.getText() + e.getKeyChar());
-                        signupViewModel.setState(currentState);
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                    }
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
+        logOut.addActionListener(
+                // This creates an anonymous subclass of ActionListener and instantiates it.
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(logOut)) {
+                            logoutController.execute();
+                        }
                     }
                 }
         );
@@ -124,9 +78,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
-        this.add(usernameInfo);
-        this.add(passwordInfo);
-        this.add(repeatPasswordInfo);
         this.add(buttons);
     }
 
@@ -134,14 +85,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      * React to a button click that results in evt.
      */
     public void actionPerformed(ActionEvent evt) {
-        System.out.println("Cancel not implemented yet.");
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        SignupState state = (SignupState) evt.getNewValue();
-        if (state.getUsernameError() != null) {
-            JOptionPane.showMessageDialog(this, state.getUsernameError());
-        }
+        LoggedInState loggedInstate = (LoggedInState) evt.getNewValue();
     }
 }

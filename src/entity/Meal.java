@@ -7,10 +7,10 @@ public interface Meal {
 
     String getDescription();
 
-    ArrayList<String> getIngredients();
+//    String[] getIngredients();
 
-    int getCalories();
+    float getCalories();
 
-    float getPrice();
+//    float getPrice();
 
 }

@@ -2,11 +2,20 @@ package app;
 
 import data_access.DataAccessObject;
 import entity.CommonUserProfileFactory;
+import entity.UserProfileFactory;
 import interface_adapter.Logged_in.LoggedInViewModel;
 import interface_adapter.Login.LoginViewModel;
+import interface_adapter.Logout.LogoutController;
+import interface_adapter.Logout.LogoutViewModel;
 import interface_adapter.Signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
 
+//import view.LoggedInView;
+import interface_adapter.WeeklyDietController;
+import view.LoggedInView;
+import view.LoginView;
+import view.SignupView;
+//import view.LoggedInView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -15,24 +24,28 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        JFrame frame = new JFrame("Meal-Recipe-App");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900,500);
-        frame.setLocationRelativeTo(null);
+            // Create and show the GUI
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        // Build the main program window, the main panel containing the
+        // various cards, and the layout, and stitch them together.
+
+        // The main application window.
+        JFrame application = new JFrame("Meal-Recipe-App");
+        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         CardLayout cardLayout = new CardLayout();
-        JPanel currentView = new JPanel(cardLayout);
 
-
-
-        frame.setVisible(true);
-
+        // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
-        frame.add(views);
+        application.add(views);
 
-        // The ViewManager model controls which of the view are currently being displayed.
+        // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
@@ -43,6 +56,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        LogoutViewModel logoutViewModel = new LogoutViewModel();
 
         DataAccessObject userDataAccessObject;
         try {
@@ -51,20 +65,29 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-//        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
-//                userDataAccessObject);
-//        views.add(signupView, signupView.viewName);
-//
-//        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);
-//        views.add(loginView, loginView.viewName);
-//
-//        LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
-//        views.add(loggedInView, loggedInView.viewName);
-//
-//        viewManagerModel.setActiveView(signupView.viewName);
-//        viewManagerModel.firePropertyChanged();
-//
-//        application.pack();
-//        application.setVisible(true);
+        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                userDataAccessObject);
+        views.add(signupView, signupView.viewName);
+
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
+        userDataAccessObject);
+        views.add(loginView, loginView.viewName);
+
+        UserProfileFactory userProfileFactory = new CommonUserProfileFactory();
+
+        WeeklyDietController weeklyDietController = WeeklyDietControllerFactory.createWeeklyDietController(
+                loggedInViewModel, viewManagerModel, userDataAccessObject, userProfileFactory);
+
+        LogoutController logoutController = LogoutControllerFactory.createLogoutController(viewManagerModel,
+                logoutViewModel);
+
+        LoggedInView loggedInView = new LoggedInView(weeklyDietController, loggedInViewModel, logoutController);
+        views.add(loggedInView, loggedInView.viewName);
+
+        viewManagerModel.setActiveView(signupView.viewName);
+        viewManagerModel.firePropertyChanged();
+
+        application.pack();
+        application.setVisible(true);
     }
 }

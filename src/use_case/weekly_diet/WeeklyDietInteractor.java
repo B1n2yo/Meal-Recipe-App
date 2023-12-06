@@ -1,14 +1,10 @@
 package use_case.weekly_diet;
 
 import api.EdamamAPICall;
-import api.NutritionixAPICall;
 import com.alibaba.fastjson.JSONException;
 import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
-import interface_adapter.DailyCalorieCalculatorController;
-import use_case.DailyCalorieCalculator.DailyCalorieCalculatorInteractor;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,23 +54,31 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
         int mealTypeInt = 1;
         do {
             Dictionary<String, Object> query = new Hashtable<>();
-            query.put("mealType", mealType.get(mealTypeInt));
-            String calories = mealTypeCals.get(mealTypeInt) - 0.1 * mealTypeCals.get(mealTypeInt) + "-" +
-                    mealTypeCals.get(mealTypeInt) + 0.1 * mealTypeCals.get(mealTypeInt);
-            query.put("calories", calories);
-
             for (int i = 0; i < dietaryRestrictions.size(); i++) {
                 query.put("health", dietaryRestrictions.get(i));
             }
+            query.put("mealType", mealType.get(mealTypeInt));
+            String calories = mealTypeCals.get(mealTypeInt) - 0.1 * mealTypeCals.get(mealTypeInt) + "-" +
+                    (mealTypeCals.get(mealTypeInt) + 0.1 * mealTypeCals.get(mealTypeInt));
+            System.out.println(calories);
+            query.put("calories", calories);
 
+            Dictionary<String, ArrayList<String>> result = new Hashtable<>();
             try {
-                EdamamAPICall.RecipeUrl(query);
+                result = EdamamAPICall.RecipeUrl(query);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            MealInfo recipe = new MealInfo();
+            String key = result.keys().nextElement();
+            ArrayList<String> value = result.get(key);
+//            MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)),
+//                    Float.parseFloat(value.get(2)), Float.parseFloat(value.get(3)), Float.parseFloat(value.get(4)),
+//                    Float.parseFloat(value.get(5)), Float.parseFloat(value.get(6)), Float.parseFloat(value.get(7)),
+//                    Float.parseFloat(value.get(8)), value.get(9).split(","));
+
+            MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)));
 
             if (!weeklyDietDataAccessObject.recipeSaved(recipe, userProfile)) {
                 if (mealTypeInt < 3) {

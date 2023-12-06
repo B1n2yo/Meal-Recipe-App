@@ -11,10 +11,11 @@ public class SignupController {
         this.userSignupUseCaseInteractor = userSignupUseCaseInteractor;
     }
 
-    public void execute(String username, String password1, String password2, float weight, float height, int age,
-                        ArrayList<String> dietaryRestrictions,  float weeklyBudget, int recommendedDailyCalories) {
-        SignupInputData signupInputData = new SignupInputData(username, password1, password2, weight, height, age,
-                dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+    public void execute(String username, String password1, String password2, String gender, float weight, float height,
+                        int age, ArrayList<String> dietaryRestrictions,  float weeklyBudget,
+                        int recommendedDailyCalories) {
+        SignupInputData signupInputData = new SignupInputData(username, password1, password2, gender, weight, height,
+                age, dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
         this.userSignupUseCaseInteractor.execute(signupInputData);
     }
 }

@@ -9,6 +9,7 @@ public class SignupState {
     private String passwordError = null;
     private String repeatPassword = "";
     private String repeatPasswordError = null;
+    private String gender = "";
     private float weight = 0;
     private float height = 0;
     private int age = 0;
@@ -23,6 +24,7 @@ public class SignupState {
         passwordError = copy.passwordError;
         repeatPassword = copy.repeatPassword;
         repeatPasswordError = copy.repeatPasswordError;
+        gender = copy.gender;
         weight = copy.weight;
         height = copy.height;
         age = copy.age;
@@ -54,6 +56,7 @@ public class SignupState {
     public String getRepeatPasswordError() {
         return repeatPasswordError;
     }
+    public String getGender() { return gender; }
     public float getWeight() { return weight; }
     public float getHeight() { return height; }
     public int getAge() { return age; }
@@ -87,11 +90,18 @@ public class SignupState {
     public void setRepeatPasswordError(String repeatPasswordError) {
         this.repeatPasswordError = repeatPasswordError;
     }
+    public void setGender(String gender) { this.gender = gender; }
     public void setWeight(float weight) { this.weight = weight; }
     public void setHeight(float height) { this.height = height; }
     public void setAge(int age) { this.age = age; }
     public void setDietaryRestrictions(ArrayList<String> dietaryRestrictions) {
         this.dietaryRestrictions = dietaryRestrictions; }
+    public void addRestriction(String restriction) {
+        this.dietaryRestrictions.add(restriction);
+    }
+    public void removeRestriction(String restriction) {
+        this.dietaryRestrictions.remove(restriction);
+    }
     public void setWeeklyBudget(float weeklyBudget) { this.weeklyBudget = weeklyBudget; }
     public void setRecommendedDailyCalories(int recommendedDailyCalories) {
         this.recommendedDailyCalories = recommendedDailyCalories; }
