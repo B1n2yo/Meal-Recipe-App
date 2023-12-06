@@ -62,8 +62,12 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     ////////////////////////////
                     float weeklyBudget = Float.parseFloat(col[headers.get("weeklyBudget")]);
                     float recommendedDailyCalories = Float.parseFloat(col[headers.get("recommendedDailyCalories")]);
+                    String stringRecipes = String.valueOf(col[headers.get("recipses")]);
+                    String[] recipe = stringRecipes.replaceAll("\\[|\\]",
+                            "").split(", ");
+                    ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipe));
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
-                            dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+                            dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
                     accounts.put(username, user);
                 }
             }
@@ -105,7 +109,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
-    public void saveRecipe(MealInfo recipe, UserProfile userProfile) {
+    public void saveRecipe(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -116,7 +120,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        col[headers.get("recipes")] += recipe + ",";
+                        userProfile.addRecipe(recipeName);
                     }
                 }
                 this.save();
@@ -127,7 +131,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
-    public boolean recipeSaved(MealInfo recipe, UserProfile userProfile) {
+    public boolean recipeSaved(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -138,11 +142,8 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        String[] recipes = col[headers.get("recipes")].split(",");
-                        for (String r : recipes) {
-                            if (r.contentEquals(recipe.toString())) {
-                                return true;
-                            }
+                        if (userProfile.getRecipes().contains(recipeName)) {
+                            return true;
                         }
                     }
                 }
@@ -167,7 +168,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                         user.getUsername(), user.getPassword(), user.getGender(), String.valueOf(user.getWeight()),
                         String.valueOf(user.getHeight()), String.valueOf(user.getAge()),
                         user.getDietaryRestrictions().toString(), String.valueOf(user.getWeeklyBudget()),
-                        String.valueOf(user.getRecommendedDailyCalories()), " ");
+                        String.valueOf(user.getRecommendedDailyCalories()), user.getRecipes());
                 writer.write(line);
                 writer.newLine();
             }
