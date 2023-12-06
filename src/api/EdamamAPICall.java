@@ -75,6 +75,7 @@ public class EdamamAPICall {
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
+        System.out.println(response);
         return filterResponseBody(response.body().string());
     }
 }

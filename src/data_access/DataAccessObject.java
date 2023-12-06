@@ -47,7 +47,28 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
 
                 String row;
                 while ((row = reader.readLine()) != null) {
-                    String[] col = row.split(",");
+
+                    String[] col = new String[10];
+                    String substring = "";
+                    boolean inList = false;
+                    int colNum = 0;
+                    for (int i = 0; i < row.length(); i++) {
+                        if (row.charAt(i) == '[') {
+                            inList = true;
+                        }
+                        if (row.charAt(i) == ']') {
+                            inList = false;
+                        }
+                        if (!inList && row.charAt(i) == ',') {
+                            col[colNum] = substring;
+                            colNum++;
+                            substring = "";
+                        }
+                        else {
+                            substring += row.charAt(i);
+                        }
+                    }
+
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
                     String gender = String.valueOf(col[headers.get("gender")]);
@@ -62,10 +83,10 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     ////////////////////////////
                     float weeklyBudget = Float.parseFloat(col[headers.get("weeklyBudget")]);
                     float recommendedDailyCalories = Float.parseFloat(col[headers.get("recommendedDailyCalories")]);
-                    String stringRecipes = String.valueOf(col[headers.get("recipses")]);
-                    String[] recipe = stringRecipes.replaceAll("\\[|\\]",
+                    String stringRecipes = String.valueOf(col[headers.get("recipes")]);
+                    String[] recipesElements = stringRecipes.replaceAll("\\[|\\]",
                             "").split(", ");
-                    ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipe));
+                    ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipesElements));
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
                             dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
                     accounts.put(username, user);
