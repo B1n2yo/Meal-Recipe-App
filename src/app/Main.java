@@ -25,6 +25,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+            // Create and show the GUI
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
