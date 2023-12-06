@@ -1,30 +1,22 @@
 package interface_adapter.Exercise;
 
 public class ExerciseState {
-    private String exerciseType = "";
-    private float duration = 0;
+
+    private String exercisePerformed = "";
 
     public ExerciseState(ExerciseState copy) {
-        exerciseType = copy.exerciseType;
-        duration = copy.duration;
+        exercisePerformed = copy.exercisePerformed;
     }
 
     public ExerciseState() {
     }
 
-    public String getExerciseType() {
-        return exerciseType;
-    }
-    public float getDuration() {
-        return duration;
+    public String getExercisePerformed() {
+        return exercisePerformed;
     }
 
-    public void setExerciseType(String exerciseType) {
-        this.exerciseType = exerciseType;
-    }
 
-    public void setDuration(float duration) {
-        this.duration = duration;
+    public void setExercisePerformed(String exercisePerformed) {
+        this.exercisePerformed = exercisePerformed;
     }
-
 }

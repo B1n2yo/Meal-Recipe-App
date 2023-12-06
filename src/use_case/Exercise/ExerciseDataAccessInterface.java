@@ -1,7 +1,7 @@
 package use_case.Exercise;
 
-import entity.UserProfile;
+import data_access.ExerciseData;
 
 public interface ExerciseDataAccessInterface {
-    float get(UserProfile user);
+    ExerciseData call(String username, String exercisePerformed);
 }
