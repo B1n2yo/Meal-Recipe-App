@@ -99,6 +99,9 @@ public class SignupState {
     public void addRestriction(String restriction) {
         this.dietaryRestrictions.add(restriction);
     }
+    public void removeRestriction(String restriction) {
+        this.dietaryRestrictions.remove(restriction);
+    }
     public void setWeeklyBudget(float weeklyBudget) { this.weeklyBudget = weeklyBudget; }
     public void setRecommendedDailyCalories(int recommendedDailyCalories) {
         this.recommendedDailyCalories = recommendedDailyCalories; }

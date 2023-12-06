@@ -46,7 +46,10 @@ public class UserProfile {
     public float getWeeklyBudget() {
         return this.weeklyBudget;
     }
+
     public float getRecommendedDailyCalories() {
-        return recommendedDailyCalories;
+        return this.recommendedDailyCalories;
     }
+    public void setRecommendedDailyCalories(float recommendedDailyCalories) {
+        this.recommendedDailyCalories = recommendedDailyCalories; }
 }

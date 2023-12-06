@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -16,20 +17,20 @@ public class EdamamAPICall {
     private static final String API_URL = "https://api.edamam.com/api/recipes/v2?type=public&app_id=981e8b83&" +
             "app_key=%202fba7f42e263a88f352970997e1158c3";
 
-    public static void main(String[] args) throws IOException {
-        // This is an examaple of how parameters should be given to the API
-        Dictionary<String, Object> query = new Hashtable<>();
-        query.put("mealType", "Breakfast");
-        query.put("calories", "100-300");
-
-        try {
-            RecipeUrl(query);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static void main(String[] args) throws IOException {
+//        // This is an examaple of how parameters should be given to the API
+//        Dictionary<String, Object> query = new Hashtable<>();
+//        query.put("mealType", "Breakfast");
+//        query.put("calories", "100-300");
+//
+//        try {
+//            RecipeUrl(query);
+//        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     //This method adds the parameters to the API URL from a dictionary
     private static String queryAdder(Dictionary query) {
@@ -46,31 +47,35 @@ public class EdamamAPICall {
     }
 
     // This method filters the response body to get the recipe name and URL. Other information can be added as needed.
-    private static void filterResponseBody(String responseBody) {
+    private static Dictionary<String, ArrayList<String>> filterResponseBody(String responseBody) {
+        Dictionary<String, ArrayList<String>> recipeInfo = new Hashtable<>();
         JSONObject jsonObject = JSONObject.parseObject(responseBody);
+        System.out.println(responseBody);
         JSONArray hits = jsonObject.getJSONArray("hits");
         for (int i = 0; i < hits.size(); i++) {
             JSONObject hit = hits.getJSONObject(i);
             JSONObject recipe = hit.getJSONObject("recipe");
             String label = recipe.getString("label");
             String url = recipe.getString("url");
-            double calories = recipe.getDouble("calories");
-            double yield = recipe.getDouble("yield");
-            System.out.println(label + ": " + url + " calories per serving: " + calories / yield);
+            String calories = recipe.getString("calories");
+            ArrayList<String> recipeInfoList = new ArrayList<>();
+            recipeInfoList.add(url);
+            recipeInfoList.add(calories);
+
+            recipeInfo.put(label, recipeInfoList);
         }
+        return recipeInfo;
     }
 
-    public static JSONObject RecipeUrl(Dictionary query) throws JSONException, IOException {
+    public static Dictionary<String, ArrayList<String>> RecipeUrl(Dictionary query) throws JSONException, IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "mealType=Breakfast");
         Request request = new Request.Builder()
                 .url(queryAdder(query))
-                .method("GET",null)
+                .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
-        filterResponseBody(response.body().string());
-        return null;
+        return filterResponseBody(response.body().string());
     }
 }
