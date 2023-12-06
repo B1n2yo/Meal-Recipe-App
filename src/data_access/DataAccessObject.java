@@ -2,6 +2,9 @@ package data_access;
 
 import entity.UserProfile;
 import entity.UserProfileFactory;
+import okhttp3.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
@@ -67,11 +70,6 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
         }
     }
     @Override
-    public float get(UserProfile user) {
-        return user.getWeight();
-    }
-
-    @Override
     public boolean existsByName(String identifier) {
         return accounts.containsKey(identifier);
     }
@@ -105,6 +103,50 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
             }
             writer.close();
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ExerciseData call(String username, String exercisePerformed) {
+        try{
+            UserProfile user = getUserProfile(username);
+            String query =
+                    "{\n" +
+                            "\"query\" : \"" + exercisePerformed + "\",\n" +
+                            "\"gender\" : \"" + user.getGender() + "\",\n" +
+                            "\"weight_kg\" : \"" + user.getWeight() + "\",\n" +
+                            "\"height_cm\" : \"" + user.getHeight() + "\",\n" +
+                            "\"age\" : \"" + user.getAge() + "\"\n" +
+                            "}";
+            OkHttpClient client = new OkHttpClient();
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, query);
+            Request request = new Request.Builder()
+                    .url("https://trackapi.nutritionix.com/v2/natural/exercise")
+                    .post(body)
+                    .addHeader("content-type", "application/json")
+                    .addHeader("x-app-id", "a850fd03")
+                    .addHeader("x-app-key", "67f8395ca094e8e9fdeee99729678c18")
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            System.out.println(response.code());
+            if (response.code() == 200) {
+
+                // This is the string representation of the response body (looks exactly like a JSON file).
+                String responseBody = response.body().string();
+                JSONObject JSONResponseBody = new JSONObject(responseBody);
+                JSONArray exerciseInfo = JSONResponseBody.getJSONArray("exercises");
+                if (exerciseInfo.isEmpty()) {
+                    return null;
+                } else {
+                    JSONObject data = exerciseInfo.getJSONObject(0);
+                    return new ExerciseData(data.getString("user_input"), data.getInt("duration_min"), data.getInt("nf_calories"));
+                }
+            }
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

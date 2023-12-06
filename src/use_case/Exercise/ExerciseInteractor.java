@@ -1,23 +1,34 @@
-//package use_case.Exercise;
-//
-//public class ExerciseInteractor implements ExerciseInputBoundary {
-//
-//    final ExerciseDataAccessInterface dataAccessObject;
-//
-//    final ExerciseOutputBoundary exercisePresenter;
-//
-//    public ExerciseInteractor(ExerciseDataAccessInterface dataAccessObject, ExerciseOutputBoundary exercisePresenter) {
-//        this.dataAccessObject = dataAccessObject;
-//        this.exercisePresenter = exercisePresenter;
-//    }
-//
-//    @Override
-//    public void execute(ExerciseInputData exerciseInputData) {
-//        String exerciseType = exerciseInputData.getExerciseType();
-//        float duration = exerciseInputData.getDuration();
-//        float weight = exerciseInputData.getWeight(); // change to get using DAO instead.
-//        int caloriesBurned = 0;
-//        float MET;
+package use_case.Exercise;
+
+import data_access.ExerciseData;
+
+public class ExerciseInteractor implements ExerciseInputBoundary {
+
+    final ExerciseDataAccessInterface dataAccessObject;
+
+    final ExerciseOutputBoundary exercisePresenter;
+
+    public ExerciseInteractor(ExerciseDataAccessInterface dataAccessObject, ExerciseOutputBoundary exercisePresenter) {
+        this.dataAccessObject = dataAccessObject;
+        this.exercisePresenter = exercisePresenter;
+    }
+
+    @Override
+    public void execute(ExerciseInputData exerciseInputData) {
+        String username = exerciseInputData.getUsername();
+        String exercisePerformed = exerciseInputData.getExercisePerformed();
+        ExerciseData exerciseData = dataAccessObject.call(username, exercisePerformed);
+        if (exerciseData == null) {
+            exercisePresenter.prepareFailView("No exercises were recognized in your request.");
+        }
+        else {
+            String exerciseName = exerciseData.getExerciseName();
+            int duration = exerciseData.getDuration();
+            int caloriesBurned = exerciseData.getCaloriesBurned();
+            ExerciseOutputData exerciseOutputData = new ExerciseOutputData(exerciseName, duration, caloriesBurned);
+            exercisePresenter.prepareSuccessView(exerciseOutputData);
+        }
+        // old code before switch to using API
 //        switch (exerciseType) {
 //            case "Walking_slow":
 //                MET = 2;
@@ -64,8 +75,8 @@
 //                caloriesBurned = (int) (MET * weight * duration * (3.5 / 200));
 //                break;
 //            default:
-//                // prepare fail view
+                // prepare fail view
 //        }
 //        ExerciseOutputData exerciseOutputData = new ExerciseOutputData(caloriesBurned);
-//    }
-//}
+    }
+}
