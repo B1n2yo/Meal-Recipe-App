@@ -132,7 +132,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                                     JLabel recipeCals = new JLabel("Calories: " + diet.getCalories());
                                     recipeCals.setForeground(FONT_COLOUR);
                                     JLabel recipeProtein = new JLabel("Protein: " + diet.getProtein());
-                                    System.out.println(diet.getProtein());
                                     recipeProtein.setForeground(FONT_COLOUR);
                                     meal.add(recipeName);
                                     meal.add(recipeDescription);
