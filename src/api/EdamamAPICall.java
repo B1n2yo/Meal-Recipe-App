@@ -40,11 +40,17 @@ public class EdamamAPICall {
 
             if ("health".equals(key)) {
                 Object value = query.get(key);
-                ArrayList<String> health = (ArrayList<String>) value;
-                for (String s : health) {
-                    urlBuilder.addQueryParameter("health", s);
+                if (value instanceof ArrayList) {
+                    ArrayList<String> health = (ArrayList<String>) value;
+                    System.out.println(health.contains(""));
+                    if (health.contains("")) {
+                        continue;
+                    } else {
+                        for (String s : health) {
+                            urlBuilder.addQueryParameter("health", s);
+                        }
+                    }
                 }
-
             } else {
                 urlBuilder.addQueryParameter(key, (String) query.get(key));
             }
@@ -65,6 +71,9 @@ public class EdamamAPICall {
             String url = recipe.getString("url");
             String calories = recipe.getString("calories");
             ArrayList<String> recipeInfoList = new ArrayList<>();
+
+            String protein = recipe.getString("protein");
+            recipeInfoList.add(protein);
             recipeInfoList.add(url);
             recipeInfoList.add(calories);
 

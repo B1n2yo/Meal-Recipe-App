@@ -7,6 +7,8 @@ import interface_adapter.Signup.SignupState;
 import interface_adapter.Signup.SignupViewModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +31,14 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     final JButton signUp;
     private final LoginController loginController;
 
+    // Colours
+    private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
+    private final java.awt.Color BACKGROUND_COLOUR = new java.awt.Color(23, 32, 46);
+    private final java.awt.Color ACCENT_COLOUR = new java.awt.Color(136, 240, 115);
+    private final Border BORDER = BorderFactory.createLineBorder(ACCENT_COLOUR, 5);
+    private final Border INVIS_BORDER = BorderFactory.createLineBorder(
+            new java.awt.Color(23, 32, 46),10);
+
     public LoginView(LoginViewModel loginViewModel, LoginController controller) {
 
         this.loginController = controller;
@@ -36,17 +46,25 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.loginViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel("Login Screen");
+        title.setForeground(FONT_COLOUR);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel("Username"), usernameInputField);
+        usernameInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel("Password"), passwordInputField);
+        passwordInfo.setBackground(BACKGROUND_COLOUR);
 
         JPanel buttons = new JPanel();
+        buttons.setBackground(BACKGROUND_COLOUR);
         logIn = new JButton(loginViewModel.LOGIN_BUTTON_LABEL);
+        logIn.setForeground(FONT_COLOUR);
+        logIn.setBackground(BACKGROUND_COLOUR);
         buttons.add(logIn);
         signUp = new JButton(loginViewModel.SIGNUP_BUTTON_LABEL);
+        signUp.setForeground(FONT_COLOUR);
+        signUp.setBackground(BACKGROUND_COLOUR);
         buttons.add(signUp);
 
         logIn.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
@@ -95,7 +113,9 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
             public void keyReleased(KeyEvent e) {
             }
         });
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new GridLayout(4, 1));
+        this.setBackground(BACKGROUND_COLOUR);
+        this.setBorder(new CompoundBorder(BORDER, INVIS_BORDER));
 
         passwordInputField.addKeyListener(
                 new KeyListener() {
