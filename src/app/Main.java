@@ -3,19 +3,17 @@ package app;
 import data_access.DataAccessObject;
 import entity.CommonUserProfileFactory;
 import entity.UserProfileFactory;
+import interface_adapter.Exercise.ExerciseViewModel;
 import interface_adapter.Logged_in.LoggedInViewModel;
 import interface_adapter.Login.LoginViewModel;
 import interface_adapter.Logout.LogoutController;
 import interface_adapter.Logout.LogoutViewModel;
 import interface_adapter.Signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-
-//import view.LoggedInView;
 import interface_adapter.WeeklyDietController;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
-//import view.LoggedInView;
 import view.ViewManager;
 
 import javax.swing.*;
@@ -31,6 +29,7 @@ public class Main {
         // The main application window.
         JFrame application = new JFrame("Meal-Recipe-App");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        application.setLocation(400, 200);
 
         CardLayout cardLayout = new CardLayout();
 
@@ -50,6 +49,7 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         LogoutViewModel logoutViewModel = new LogoutViewModel();
+        ExerciseViewModel exerciseViewModel = new ExerciseViewModel();
 
         DataAccessObject userDataAccessObject;
         try {
@@ -65,6 +65,9 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, signupViewModel,
         userDataAccessObject);
         views.add(loginView, loginView.viewName);
+
+//        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel, userDataAccessObject);
+//        views.add(exerciseView, exerciseView.viewName);
 
         UserProfileFactory userProfileFactory = new CommonUserProfileFactory();
 

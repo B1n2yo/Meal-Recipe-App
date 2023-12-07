@@ -1,6 +1,5 @@
 package data_access;
 
-import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
 //import use_case.Exercise.ExerciseDataAccessInterface;
@@ -75,21 +74,15 @@ public class DataAccessObject implements LoginUserDataAccessInterface, SignupUse
                     float weight = Float.parseFloat(col[headers.get("weight")]);
                     float height = Float.parseFloat(col[headers.get("height")]);
                     int age = Integer.parseInt(col[headers.get("age")]);
-                    ////////////////////////////
                     String stringRepresentation = String.valueOf(col[headers.get("dietaryRestrictions")]);
                     String[] elements = stringRepresentation.replaceAll("\\[|\\]",
                             "").split(", ");
                     ArrayList<String> dietaryRestrictions = new ArrayList<>(Arrays.asList(elements));
-                    ////////////////////////////
                     float recommendedDailyCalories = Float.parseFloat(col[headers.get("recommendedDailyCalories")]);
-
-                    ////////////////////////////
                     String stringRecipes = String.valueOf(col[headers.get("recipes")]);
                     String[] recipesElements = stringRecipes.replaceAll("\\[|\\]",
                             "").split(", ");
-                    System.out.println(col);
                     ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipesElements));
-                    ////////////////////////////
 
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
                             dietaryRestrictions, recommendedDailyCalories, recipes);
@@ -110,9 +103,10 @@ public class DataAccessObject implements LoginUserDataAccessInterface, SignupUse
             return Float.parseFloat(String.valueOf(655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)));
         }
     }
-    public UserProfile get(String username) {
-        return accounts.get(username);
-    }
+//    @Override
+//    public float get(UserProfile user) {
+//        return user.getWeight();
+//    }
 
     @Override
     public boolean existsByName(String identifier) {

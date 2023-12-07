@@ -1,6 +1,5 @@
 package use_case.weekly_diet;
 
-import entity.MealInfo;
 import entity.UserProfile;
 
 public interface WeeklyDietDataAccessInterface {

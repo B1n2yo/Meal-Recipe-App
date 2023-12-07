@@ -1,6 +1,5 @@
 package interface_adapter;
 
-import entity.UserProfile;
 import use_case.weekly_diet.WeeklyDietInputBoundary;
 import use_case.weekly_diet.WeeklyDietInputData;
 

@@ -21,9 +21,6 @@ public class WeeklyDietPresenter implements WeeklyDietOutputBoundary {
 
     @Override
     public void prepareSuccessView(WeeklyDietOutputData response) {
-        LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
-        response.setCreationTime(responseTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
-
         LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setMealPlan(response.getWeeklyDiet());
         this.loggedInViewModel.setState(loggedInState);
