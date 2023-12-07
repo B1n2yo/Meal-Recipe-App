@@ -5,6 +5,8 @@ import interface_adapter.Signup.SignupState;
 import interface_adapter.Signup.SignupViewModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +31,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final SignupController signupController;
 
     private final JButton signUp;
+    
+    // Colours
+    private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
+    private final java.awt.Color BACKGROUND_COLOUR = new java.awt.Color(23, 32, 46);
+    private final java.awt.Color ACCENT_COLOUR = new java.awt.Color(136, 240, 115);
+    private final Border BORDER = BorderFactory.createLineBorder(ACCENT_COLOUR, 5);
+    private final Border INVIS_BORDER = BorderFactory.createLineBorder(
+            new java.awt.Color(23, 32, 46), 10);
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
@@ -37,35 +47,54 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         signupViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(signupViewModel.TITLE_LABEL);
+        title.setForeground(FONT_COLOUR);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.USERNAME_LABEL), usernameInputField);
+        usernameInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.PASSWORD_LABEL), passwordInputField);
+        passwordInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+        repeatPasswordInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel genderInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.GENDER_LABEL), genderInputField);
+        genderInfo.setBackground(BACKGROUND_COLOUR);
 
         LabelTextPanel weightInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.WEIGHT_LABEL), weightInputField);
+        weightInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel heightInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.HEIGHT_LABEL), heightInputField);
+        heightInfo.setBackground(BACKGROUND_COLOUR);
         LabelTextPanel ageInfo = new LabelTextPanel(
                 new JLabel(signupViewModel.AGE_LABEL), ageInputField);
-        JPanel buttons = new JPanel();
+        ageInfo.setBackground(BACKGROUND_COLOUR);
         signUp = new JButton(signupViewModel.SIGNUP_BUTTON_LABEL);
-        buttons.add(signUp);
+        signUp.setForeground(FONT_COLOUR);
+        signUp.setBackground(BACKGROUND_COLOUR);
 
         dietaryRestrictionButton = new JButton(signupViewModel.DIETARY_RESTRICTIONS_LABEL);
+        dietaryRestrictionButton.setForeground(FONT_COLOUR);
+        dietaryRestrictionButton.setBackground(BACKGROUND_COLOUR);
 
         JPopupMenu popUpMenu = new JPopupMenu();
+        popUpMenu.setBackground(BACKGROUND_COLOUR);
 
         JCheckBox dairyFree = new JCheckBox("dairy-free");
+        dairyFree.setForeground(FONT_COLOUR);
+        dairyFree.setBackground(BACKGROUND_COLOUR);
         JCheckBox glutenFree = new JCheckBox("gluten-free");
+        glutenFree.setForeground(FONT_COLOUR);
+        glutenFree.setBackground(BACKGROUND_COLOUR);
         JCheckBox peanutFree = new JCheckBox("peanut-free");
+        peanutFree.setForeground(FONT_COLOUR);
+        peanutFree.setBackground(BACKGROUND_COLOUR);
         JCheckBox vegetarian = new JCheckBox("vegetarian");
+        vegetarian.setForeground(FONT_COLOUR);
+        vegetarian.setBackground(BACKGROUND_COLOUR);
 
         popUpMenu.add(dairyFree);
         popUpMenu.add(glutenFree);
@@ -134,9 +163,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
             }
         });
-
-
-        buttons.add(dietaryRestrictionButton);
 
 //        String selectedRestriction = (String) dropDownMenu.getSelectedItem();
 //        SignupState currentState = signupViewModel.getState();
@@ -297,7 +323,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new GridLayout(10, 1));
+        this.setBackground(BACKGROUND_COLOUR);
+        this.setBorder(new CompoundBorder(BORDER, INVIS_BORDER));
 
         this.add(title);
         this.add(usernameInfo);
@@ -307,7 +335,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(weightInfo);
         this.add(heightInfo);
         this.add(ageInfo);
-        this.add(buttons);
+        this.add(dietaryRestrictionButton);
+        this.add(signUp);
 
     }
 

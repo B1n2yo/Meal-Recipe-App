@@ -31,10 +31,15 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final JButton getRecipes;
     private final JButton logOut;
     private JDialog recipes;
-    private final Border border = BorderFactory.createLineBorder(new java.awt.Color(136, 240, 115), 5);
-    private final Border invisBorder = BorderFactory.createLineBorder(new java.awt.Color(23, 32, 46), 10);
-    private final java.awt.Color fontColour = new java.awt.Color(222, 247, 250);
-    private final java.awt.Color backgroundColour = new java.awt.Color(23, 32, 46);
+    
+    // Colours
+    private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
+    private final java.awt.Color BACKGROUND_COLOUR = new java.awt.Color(23, 32, 46);
+    private final java.awt.Color ACCENT_COLOUR = new java.awt.Color(136, 240, 115);
+    private final Border BORDER = BorderFactory.createLineBorder(ACCENT_COLOUR, 5);
+    private final Border INVIS_BORDER = BorderFactory.createLineBorder
+            (new java.awt.Color(23, 32, 46), 10);
+    
     private final Dictionary<Integer, String> mealType = new Hashtable<>() {{
         put(0, "Breakfast");
         put(1, "Lunch");
@@ -50,12 +55,18 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.logoutController = logoutController;
 
         JLabel title = new JLabel(loggedInViewModel.TITLE_LABEL);
+        title.setForeground(FONT_COLOUR);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel buttons = new JPanel();
+        buttons.setBackground(BACKGROUND_COLOUR);
         getRecipes = new JButton(loggedInViewModel.GET_RECIPES_BUTTON_LABEL);
+        getRecipes.setForeground(FONT_COLOUR);
+        getRecipes.setBackground(BACKGROUND_COLOUR);
         buttons.add(getRecipes);
         logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut.setForeground(FONT_COLOUR);
+        logOut.setBackground(BACKGROUND_COLOUR);
         buttons.add(logOut);
 
         getRecipes.addActionListener(
@@ -74,20 +85,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             for (int j = 0; j < weeklyDiet.size() / 3; j++) {
                                 JPanel day = new JPanel();
                                 day.setLayout(new GridLayout(4, 1, 5, 10));
-                                day.setBackground(backgroundColour);
+                                day.setBackground(BACKGROUND_COLOUR);
                                 JLabel dayNum = new JLabel("Day " + (j + 1));
-                                dayNum.setForeground(fontColour);
+                                dayNum.setForeground(FONT_COLOUR);
                                 dayNum.setAlignmentX(Component.CENTER_ALIGNMENT);
                                 day.add(dayNum);
                                 for (int i = 0; i < 3; i++) {
                                     MealInfo diet = weeklyDiet.get(3 * j + i);
                                     JPanel meal = new JPanel();
                                     meal.setLayout(new GridLayout(3, 1, 5, 5));
-                                    meal.setBackground(backgroundColour);
+                                    meal.setBackground(BACKGROUND_COLOUR);
                                     JLabel recipeName = new JLabel(mealType.get(i) + ": " + diet.getName());
-                                    recipeName.setForeground(fontColour);
+                                    recipeName.setForeground(FONT_COLOUR);
                                     JLabel recipeDescription = new JLabel(diet.getDescription());
-                                    recipeDescription.setForeground(new java.awt.Color(136, 240, 115));
+                                    recipeDescription.setForeground(ACCENT_COLOUR);
                                     recipeDescription.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                                     recipeDescription.addMouseListener(new MouseAdapter() {
 
@@ -114,13 +125,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                                         }
                                     });
                                     JLabel recipeCals = new JLabel("Calories: " + diet.getCalories());
-                                    recipeCals.setForeground(fontColour);
+                                    recipeCals.setForeground(FONT_COLOUR);
                                     meal.add(recipeName);
                                     meal.add(recipeDescription);
                                     meal.add(recipeCals);
                                     day.add(meal);
                                 }
-                                day.setBorder(new CompoundBorder(border, invisBorder));
+                                day.setBorder(new CompoundBorder(BORDER, INVIS_BORDER));
                                 day.setAlignmentY(Component.CENTER_ALIGNMENT);
                                 recipe.add(day);
                             }
@@ -151,7 +162,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new GridLayout(2, 1));
+        this.setBackground(BACKGROUND_COLOUR);
+        this.setBorder(new CompoundBorder(BORDER, INVIS_BORDER));
 
         this.add(title);
         this.add(buttons);
