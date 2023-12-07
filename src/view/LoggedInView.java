@@ -87,7 +87,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             JPanel recipe = new JPanel();
                             recipe.setLayout(new BoxLayout(recipe, BoxLayout.Y_AXIS));
                             ArrayList<MealInfo> weeklyDiet = currentState.getMealPlan();
-                            for (int j = 0; j < weeklyDiet.size() / 4; j++) {
+                            for (int j = 0; j < weeklyDiet.size() / 3; j++) {
                                 JPanel day = new JPanel();
                                 day.setLayout(new GridLayout(4, 1, 5, 10));
                                 day.setBackground(BACKGROUND_COLOUR);
@@ -95,10 +95,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                                 dayNum.setForeground(FONT_COLOUR);
                                 dayNum.setAlignmentX(Component.CENTER_ALIGNMENT);
                                 day.add(dayNum);
-                                for (int i = 0; i < 4; i++) {
-                                    MealInfo diet = weeklyDiet.get(4 * j + i);
+                                for (int i = 0; i < 3; i++) {
+                                    MealInfo diet = weeklyDiet.get(3 * j + i);
                                     JPanel meal = new JPanel();
-                                    meal.setLayout(new GridLayout(3, 1, 5, 5));
+                                    meal.setLayout(new GridLayout(4, 1, 5, 5));
                                     meal.setBackground(BACKGROUND_COLOUR);
                                     JLabel recipeName = new JLabel(mealType.get(i) + ": " + diet.getName());
                                     recipeName.setForeground(FONT_COLOUR);
@@ -132,6 +132,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                                     JLabel recipeCals = new JLabel("Calories: " + diet.getCalories());
                                     recipeCals.setForeground(FONT_COLOUR);
                                     JLabel recipeProtein = new JLabel("Protein: " + diet.getProtein());
+                                    System.out.println(diet.getProtein());
                                     recipeProtein.setForeground(FONT_COLOUR);
                                     meal.add(recipeName);
                                     meal.add(recipeDescription);
