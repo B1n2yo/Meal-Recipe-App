@@ -40,11 +40,16 @@ public class EdamamAPICall {
 
             if ("health".equals(key)) {
                 Object value = query.get(key);
-                ArrayList<String> health = (ArrayList<String>) value;
-                for (String s : health) {
-                    urlBuilder.addQueryParameter("health", s);
+                if (value instanceof ArrayList) {
+                    ArrayList<String> health = (ArrayList<String>) value;
+                    if (health.isEmpty()) {
+                        continue;
+                    } else {
+                        for (String s : health) {
+                            urlBuilder.addQueryParameter("health", s);
+                        }
+                    }
                 }
-
             } else {
                 urlBuilder.addQueryParameter(key, (String) query.get(key));
             }
