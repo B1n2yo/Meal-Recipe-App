@@ -34,6 +34,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final Border border = BorderFactory.createLineBorder(new java.awt.Color(136, 240, 115), 5);
     private final Border invisBorder = BorderFactory.createLineBorder(new java.awt.Color(23, 32, 46), 10);
     private final java.awt.Color fontColour = new java.awt.Color(222, 247, 250);
+    private final java.awt.Color backgroundColour = new java.awt.Color(23, 32, 46);
     private final Dictionary<Integer, String> mealType = new Hashtable<>() {{
         put(0, "Breakfast");
         put(1, "Lunch");
@@ -73,16 +74,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             for (int j = 0; j < weeklyDiet.size() / 3; j++) {
                                 JPanel day = new JPanel();
                                 day.setLayout(new GridLayout(4, 1, 5, 10));
-                                day.setBackground(new java.awt.Color(23, 32, 46));
+                                day.setBackground(backgroundColour);
                                 JLabel dayNum = new JLabel("Day " + (j + 1));
                                 dayNum.setForeground(fontColour);
                                 dayNum.setAlignmentX(Component.CENTER_ALIGNMENT);
                                 day.add(dayNum);
                                 for (int i = 0; i < 3; i++) {
-                                    MealInfo diet = weeklyDiet.get(i);
+                                    MealInfo diet = weeklyDiet.get(3 * j + i);
                                     JPanel meal = new JPanel();
                                     meal.setLayout(new GridLayout(3, 1, 5, 5));
-                                    meal.setBackground(new java.awt.Color(23, 32, 46));
+                                    meal.setBackground(backgroundColour);
                                     JLabel recipeName = new JLabel(mealType.get(i) + ": " + diet.getName());
                                     recipeName.setForeground(fontColour);
                                     JLabel recipeDescription = new JLabel(diet.getDescription());
@@ -125,6 +126,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             }
 
                             recipes.setSize(600, 600);
+                            // Center the dialog box
+                            Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+                            int x = (int) ((dimension.getWidth() - recipes.getWidth()) / 2);
+                            int y = (int) ((dimension.getHeight() - recipes.getHeight()) / 2);
+                            recipes.setLocation(x, y);
+
                             recipes.getContentPane().setLayout(new BorderLayout(0, 0));
                             recipes.getContentPane().add(scrollPane, BorderLayout.CENTER);
                             scrollPane.setViewportView(recipe);
