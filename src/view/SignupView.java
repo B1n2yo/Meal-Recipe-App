@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.Signup.BackController;
 import interface_adapter.Signup.SignupController;
 import interface_adapter.Signup.SignupState;
 import interface_adapter.Signup.SignupViewModel;
@@ -30,7 +31,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private final SignupController signupController;
 
+    private final BackController backController;
+
     private final JButton signUp;
+
+    private final JButton back;
     
     // Colours
     private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
@@ -40,10 +45,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final Border INVIS_BORDER = BorderFactory.createLineBorder(
             new java.awt.Color(23, 32, 46), 10);
 
-    public SignupView(SignupController controller, SignupViewModel signupViewModel) {
+    public SignupView(SignupController controller, SignupViewModel signupViewModel, BackController backController) {
 
         this.signupController = controller;
         this.signupViewModel = signupViewModel;
+        this.backController = backController;
         signupViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(signupViewModel.TITLE_LABEL);
@@ -75,6 +81,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         signUp = new JButton(signupViewModel.SIGNUP_BUTTON_LABEL);
         signUp.setForeground(FONT_COLOUR);
         signUp.setBackground(BACKGROUND_COLOUR);
+
+        back = new JButton(signupViewModel.BACK_BUTTON_LABEL);
+        back.setForeground(FONT_COLOUR);
+        back.setBackground(BACKGROUND_COLOUR);
 
         dietaryRestrictionButton = new JButton(signupViewModel.DIETARY_RESTRICTIONS_LABEL);
         dietaryRestrictionButton.setForeground(FONT_COLOUR);
@@ -173,7 +183,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(signUp)) {
                             SignupState currentState = signupViewModel.getState();
-
                             signupController.execute(currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getRepeatPassword(),
@@ -184,6 +193,44 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                                     currentState.getDietaryRestrictions(),
                                     currentState.getRecommendedDailyCalories(),
                                     currentState.getRecipes());
+
+                            SignupState newState = new SignupState();
+                            signupViewModel.setState(newState);
+                            usernameInputField.setText("");
+                            passwordInputField.setText("");
+                            repeatPasswordInputField.setText("");
+                            genderInputField.setText("");
+                            weightInputField.setText("");
+                            heightInputField.setText("");
+                            ageInputField.setText("");
+                            dairyFree.setSelected(false);
+                            glutenFree.setSelected(false);
+                            peanutFree.setSelected(false);
+                            vegetarian.setSelected(false);
+                        }
+                    }
+                }
+        );
+
+        back.addActionListener(
+                // This creates an anonymous subclass of ActionListener and instantiates it.
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(back)) {
+                            SignupState newState = new SignupState();
+                            signupViewModel.setState(newState);
+                            backController.execute();
+                            usernameInputField.setText("");
+                            passwordInputField.setText("");
+                            repeatPasswordInputField.setText("");
+                            genderInputField.setText("");
+                            weightInputField.setText("");
+                            heightInputField.setText("");
+                            ageInputField.setText("");
+                            dairyFree.setSelected(false);
+                            glutenFree.setSelected(false);
+                            peanutFree.setSelected(false);
+                            vegetarian.setSelected(false);
                         }
                     }
                 }
@@ -323,7 +370,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        this.setLayout(new GridLayout(10, 1));
+        this.setLayout(new GridLayout(11, 1));
         this.setBackground(BACKGROUND_COLOUR);
         this.setBorder(new CompoundBorder(BORDER, INVIS_BORDER));
 
@@ -337,6 +384,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(ageInfo);
         this.add(dietaryRestrictionButton);
         this.add(signUp);
+        this.add(back);
 
     }
 
