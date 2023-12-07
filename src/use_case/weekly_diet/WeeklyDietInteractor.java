@@ -53,9 +53,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
         int mealTypeInt = 1;
         do {
             Dictionary<String, Object> query = new Hashtable<>();
-            for (int i = 0; i < dietaryRestrictions.size(); i++) {
-                query.put("health", dietaryRestrictions.get(i));
-            }
+            query.put("health", dietaryRestrictions);
             query.put("mealType", mealType.get(mealTypeInt));
             String calories = mealTypeCals.get(mealTypeInt) - 0.1 * mealTypeCals.get(mealTypeInt) + "-" +
                     (mealTypeCals.get(mealTypeInt) + 0.1 * mealTypeCals.get(mealTypeInt));
