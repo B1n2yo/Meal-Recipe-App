@@ -5,6 +5,7 @@ public class ExerciseState {
     private String username = "";
     private String exerciseName = "";
     private String successMessage = null;
+
     public ExerciseState(ExerciseState copy) {
         this.username = copy.username;
         this.exerciseName = copy.exerciseName;

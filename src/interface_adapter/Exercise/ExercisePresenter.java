@@ -4,7 +4,6 @@ import interface_adapter.Logged_in.LoggedInViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.Exercise.ExerciseOutputBoundary;
 import use_case.Exercise.ExerciseOutputData;
-import view.LoggedInView;
 
 public class ExercisePresenter implements ExerciseOutputBoundary {
 
@@ -36,6 +35,12 @@ public class ExercisePresenter implements ExerciseOutputBoundary {
 
     @Override
     public void prepareFailView(String error) {
-        System.out.println(error);
+        ExerciseState exerciseState = exerciseViewModel.getState();
+        exerciseState.setSuccessMessage(error);
+        this.exerciseViewModel.setState(exerciseState);
+        this.exerciseViewModel.firePropertyChanged();
+
+        this.viewManagerModel.setActiveView(loggedInViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
     }
 }
