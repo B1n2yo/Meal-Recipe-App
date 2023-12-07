@@ -46,7 +46,7 @@ public class EdamamAPICall {
                 if (value instanceof ArrayList) {
                     ArrayList<String> health = (ArrayList<String>) value;
                     for (int i = 0; i < health.size(); i++) {
-                        urlBuilder.addQueryParameter("health", health.get(i));
+                        urlBuilder.addQueryParameter(key, health.get(i));
                     }
                 }
             } else {
