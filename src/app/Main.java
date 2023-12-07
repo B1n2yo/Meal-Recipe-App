@@ -3,6 +3,7 @@ package app;
 import data_access.DataAccessObject;
 import entity.CommonUserProfileFactory;
 import entity.UserProfileFactory;
+import interface_adapter.Exercise.ExerciseViewModel;
 import interface_adapter.Logged_in.LoggedInViewModel;
 import interface_adapter.Login.LoginViewModel;
 import interface_adapter.Logout.LogoutController;
@@ -12,11 +13,8 @@ import interface_adapter.ViewManagerModel;
 
 //import view.LoggedInView;
 import interface_adapter.WeeklyDietController;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
+import view.*;
 //import view.LoggedInView;
-import view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,6 +55,7 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         LogoutViewModel logoutViewModel = new LogoutViewModel();
+        ExerciseViewModel exerciseViewModel = new ExerciseViewModel();
 
         DataAccessObject userDataAccessObject;
         try {
@@ -73,6 +72,9 @@ public class Main {
         userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
+        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel, userDataAccessObject);
+        views.add(exerciseView, exerciseView.viewName);
+
         UserProfileFactory userProfileFactory = new CommonUserProfileFactory();
 
         WeeklyDietController weeklyDietController = WeeklyDietControllerFactory.createWeeklyDietController(
@@ -85,6 +87,7 @@ public class Main {
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(signupView.viewName);
+//        viewManagerModel.setActiveView(exerciseView.viewName); test the exercise view panel
         viewManagerModel.firePropertyChanged();
 
         application.pack();

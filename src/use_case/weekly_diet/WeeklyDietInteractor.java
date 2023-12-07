@@ -82,7 +82,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
             System.out.println(recipe.getName());
             System.out.println(mealTypeInt);
 
-            if (!weeklyDietDataAccessObject.recipeSaved(recipe.getName(), userProfile)) {
+            if (!weeklyDietDataAccessObject.recipeSaved(recipe, userProfile)) {
                 if (mealTypeInt < 3) {
                     mealTypeInt++;
                 }
@@ -90,7 +90,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
                     mealTypeInt = 1;
                 }
                 weeklyDiet.add(recipe);
-                weeklyDietDataAccessObject.saveRecipe(recipe.getName(), userProfile);
+                weeklyDietDataAccessObject.saveRecipe(recipe, userProfile);
             }
 
         } while (weeklyDiet.size() < 21);

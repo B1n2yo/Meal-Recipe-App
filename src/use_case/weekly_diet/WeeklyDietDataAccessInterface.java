@@ -7,7 +7,7 @@ public interface WeeklyDietDataAccessInterface {
 
     UserProfile getUserProfile(String username);
 
-    void saveRecipe(String recipeName, UserProfile userProfile);
+    void saveRecipe(MealInfo recipe, UserProfile userProfile);
 
-    boolean recipeSaved(String recipeName, UserProfile userProfile);
+    boolean recipeSaved(MealInfo recipe, UserProfile userProfile);
 }
