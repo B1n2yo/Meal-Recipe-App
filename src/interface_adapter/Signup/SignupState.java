@@ -16,6 +16,7 @@ public class SignupState {
     private ArrayList<String> dietaryRestrictions = new ArrayList<>();
     private float weeklyBudget = 0;
     private int recommendedDailyCalories = 0;
+    private ArrayList<String> recipes = new ArrayList<>();
 
     public SignupState(SignupState copy) {
         username = copy.username;
@@ -31,12 +32,16 @@ public class SignupState {
         dietaryRestrictions = copy.dietaryRestrictions;
         weeklyBudget = copy.weeklyBudget;
         recommendedDailyCalories = copy.recommendedDailyCalories;
+        recipes = copy.recipes;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
     public SignupState() {
     }
 
+    public String getUsername() {
+        return username;
+    }
     public String getUsernameError() {
         return usernameError;
     }
@@ -63,9 +68,7 @@ public class SignupState {
     public ArrayList<String> getDietaryRestrictions() { return dietaryRestrictions; }
     public float getWeeklyBudget() { return weeklyBudget; }
     public int getRecommendedDailyCalories() { return recommendedDailyCalories; }
-    public String getUsername() {
-        return username;
-    }
+    public ArrayList<String> getRecipes() { return recipes; }
 
     public void setUsername(String username) {
         this.username = username;
@@ -105,6 +108,7 @@ public class SignupState {
     public void setWeeklyBudget(float weeklyBudget) { this.weeklyBudget = weeklyBudget; }
     public void setRecommendedDailyCalories(int recommendedDailyCalories) {
         this.recommendedDailyCalories = recommendedDailyCalories; }
+    public void setRecipes(ArrayList<String> recipes) { this.recipes = recipes; }
 
 
     @Override

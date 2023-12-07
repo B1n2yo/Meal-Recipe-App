@@ -29,6 +29,7 @@ public class SignupInteractor implements SignupInputBoundary {
         ArrayList<String> dietaryRestrictions = signupInputData.getDietaryRestrictions();
         float weeklyBudget = signupInputData.getWeeklyBudget();
         int recommendedDailyCalories = signupInputData.getRecommendedDailyCalories();
+        ArrayList<String> recipes = signupInputData.getRecipes();
 
         if (userDataAccessObject.existsByName(username)) {
             userPresenter.prepareFailView("User already exists.");
@@ -50,7 +51,7 @@ public class SignupInteractor implements SignupInputBoundary {
             assert ((0.0 > weight) || (weight > 300.0));
             assert  ((0.0 > height) || (height > 250.0));
             UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
-                    dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+                    dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
             userDataAccessObject.save(user);
 
             SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), false);
