@@ -18,22 +18,9 @@ public class ExerciseInteractor implements ExerciseInputBoundary {
         String username = exerciseInputData.getUsername();
         String exercisePerformed = exerciseInputData.getExercisePerformed();
         UserProfile user = dataAccessObject.get(username);
-        String gender = user.getGender();
-        float weight = user.getWeight();
-        float height = user.getHeight();
-        int age = user.getAge();
-
-        String query =
-                "{\n" +
-                        "\"query\" : \"" + exercisePerformed + "\",\n" +
-                        "\"gender\" : \"" + gender + "\",\n" +
-                        "\"weight_kg\" : \"" + weight + "\",\n" +
-                        "\"height_cm\" : \"" + height + "\",\n" +
-                        "\"age\" : \"" + age + "\"\n" +
-                        "}";
 
         NutritionixAPICall apicall = new NutritionixAPICall();
-        float caloriesBurned = apicall.caloriesBurned(query);
+        float caloriesBurned = apicall.caloriesBurned(exercisePerformed, user);
         dataAccessObject.updateCalories(username, caloriesBurned);
 
         ExerciseOutputData exerciseOutputData = new ExerciseOutputData(exercisePerformed, caloriesBurned);

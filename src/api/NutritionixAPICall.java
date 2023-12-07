@@ -1,40 +1,42 @@
 package api;
 
 //import data_access.ExerciseData;
+import entity.CommonUserProfileFactory;
+import entity.UserProfile;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-public class NutritionixAPICall {
-    public static void main(String[] args) throws IOException { // example call
-        NutritionixAPICall apicall = new NutritionixAPICall();
-        String exercisePerformed = "jogging for 120 mins";
-        String gender = "male";
-        int weight = 12;
-        int height = 12;
-        int age = 12;
-        // gender, age and height does not appear to affect calculations
-        String query =
-                "{\n" +
-                        "\"query\" : \"" + exercisePerformed + "\",\n" +
-                        "\"gender\" : \"" + gender + "\",\n" +
-                        "\"weight_kg\" : \"" + weight + "\",\n" +
-                        "\"height_cm\" : \"" + height + "\",\n" +
-                        "\"age\" : \"" + age + "\"\n" +
-                        "}";
-        System.out.println(apicall.caloriesBurned(query));
-    }
+import java.sql.Array;
+import java.util.ArrayList;
 
-    public float caloriesBurned(String query) {
-        try{
+public class NutritionixAPICall {
+//    public static void main(String[] args) throws IOException { // example call
+//        NutritionixAPICall apicall = new NutritionixAPICall();
+//        String exercisePerformed = "jogging for 120 mins";
+//        ArrayList<String> dr = new ArrayList<>();
+//
+//        UserProfile userProfile = new UserProfile("ben1", "1", "male", 12, 12,
+//                12, dr, 0, dr);
+//        System.out.println(apicall.caloriesBurned(exercisePerformed, userProfile));
+//    }
+
+    public float caloriesBurned(String exercisePerformed, UserProfile userProfile) {
+        try {
             OkHttpClient client = new OkHttpClient();
-//            String exerciseDuration = exerciseName + " for " + String.valueOf(minutesPerformed) + " minutes";
+
+            String gender = userProfile.getGender();
+            float weight = userProfile.getWeight();
+            float height = userProfile.getHeight();
+            int age = userProfile.getAge();
+
             MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, query);
-//            RequestBody body = RequestBody.create(mediaType, "{\n  \"query\": \"" + exercisePerformed + "\"\n}");
+            RequestBody body = RequestBody.create(mediaType, "{\n  \"query\": \"" + exercisePerformed + "\"\n}");
             Request request = new Request.Builder()
-                    .url("https://trackapi.nutritionix.com/v2/natural/exercise")
+                    .url("https://trackapi.nutritionix.com/v2/natural/exercise?gender=" + gender + "&weight_kg=" +
+                            String.valueOf(weight) + "&height_cm=" + String.valueOf(height) + "&age=" +
+                            String.valueOf(age))
                     .post(body)
                     .addHeader("content-type", "application/json")
                     .addHeader("x-app-id", "a850fd03")
@@ -42,24 +44,15 @@ public class NutritionixAPICall {
                     .build();
 
             Response response = client.newCall(request).execute();
-//            System.out.println(request);
-//            System.out.println(response);
-//            System.out.println(response.code());
-            if (response.code() == 200) {
-
-                // This is the string representation of the response body (looks exactly like a JSON file).
-                String responseBody = response.body().string();
-//            System.out.println(responseBody);
-                JSONObject JSONResponseBody = new JSONObject(responseBody);
-                JSONArray exerciseInfo = JSONResponseBody.getJSONArray("exercises");
-                if (exerciseInfo.isEmpty()) {
-                    return 0;
-                } else {
-                    JSONObject data = exerciseInfo.getJSONObject(0);
-                    return data.getInt("nf_calories");
-                }
+            String responseBody = response.body().string();
+            JSONObject JSONResponseBody = new JSONObject(responseBody);
+            JSONArray exerciseInfo = JSONResponseBody.getJSONArray("exercises");
+            if (exerciseInfo.isEmpty()) {
+                return 0;
+            } else {
+                JSONObject data = exerciseInfo.getJSONObject(0);
+                return data.getInt("nf_calories");
             }
-            return 0;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
