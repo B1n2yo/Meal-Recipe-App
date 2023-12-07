@@ -2,7 +2,7 @@ package view;
 
 import entity.MealInfo;
 import interface_adapter.Logout.LogoutController;
-import interface_adapter.WeeklyDietController;
+import interface_adapter.WeeklyDiet.WeeklyDietController;
 import interface_adapter.Logged_in.LoggedInState;
 import interface_adapter.Logged_in.LoggedInViewModel;
 
@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,11 +28,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final LoggedInViewModel loggedInViewModel;
     private final WeeklyDietController weeklyDietController;
     private final LogoutController logoutController;
-
+    private final JButton exercises;
     private final JButton getRecipes;
     private final JButton logOut;
     private JDialog recipes;
-    
+
     // Colours
     private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
     private final java.awt.Color BACKGROUND_COLOUR = new java.awt.Color(23, 32, 46);
@@ -38,7 +40,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final Border BORDER = BorderFactory.createLineBorder(ACCENT_COLOUR, 5);
     private final Border INVIS_BORDER = BorderFactory.createLineBorder
             (new java.awt.Color(23, 32, 46), 10);
-    
+
     private final Dictionary<Integer, String> mealType = new Hashtable<>() {{
         put(0, "Breakfast");
         put(1, "Lunch");
@@ -67,6 +69,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         logOut.setForeground(FONT_COLOUR);
         logOut.setBackground(BACKGROUND_COLOUR);
         buttons.add(logOut);
+        exercises = new JButton(loggedInViewModel.EXERCISE_BUTTON_LABEL);
+        buttons.add(exercises);
 
         getRecipes.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
@@ -74,7 +78,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(getRecipes)) {
                             LoggedInState currentState = loggedInViewModel.getState();
-                            weeklyDietController.execute(currentState.getUsername());
+                            weeklyDietController.execute(currentState.getUsername(), false);
 
                             recipes = new JDialog();
                             JScrollPane scrollPane = new JScrollPane();
@@ -163,6 +167,15 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     }
                 }
         );
+        exercises.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(exercises)) {
+                            LoggedInState currentState = loggedInViewModel.getState();
+                            weeklyDietController.execute(currentState.getUsername(), true);
+                        }
+                    }
+        });
 
         this.setLayout(new GridLayout(2, 1));
         this.setBackground(BACKGROUND_COLOUR);

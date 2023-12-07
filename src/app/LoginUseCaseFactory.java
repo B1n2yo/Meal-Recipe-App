@@ -21,7 +21,6 @@ public class LoginUseCaseFactory {
 
     /** Prevent instantiation. */
     private LoginUseCaseFactory() {}
-
     public static LoginView create(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,

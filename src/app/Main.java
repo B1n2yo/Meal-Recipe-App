@@ -10,11 +10,11 @@ import interface_adapter.Logout.LogoutController;
 import interface_adapter.Logout.LogoutViewModel;
 import interface_adapter.Signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.WeeklyDietController;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+
+//import view.LoggedInView;
+import interface_adapter.WeeklyDiet.WeeklyDietController;
+import view.*;
+//import view.LoggedInView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,13 +66,14 @@ public class Main {
         userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-//        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel, userDataAccessObject);
-//        views.add(exerciseView, exerciseView.viewName);
+        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel,
+                loggedInViewModel, userDataAccessObject);
+        views.add(exerciseView, exerciseView.viewName);
 
         UserProfileFactory userProfileFactory = new CommonUserProfileFactory();
 
         WeeklyDietController weeklyDietController = WeeklyDietControllerFactory.createWeeklyDietController(
-                loggedInViewModel, viewManagerModel, userDataAccessObject, userProfileFactory);
+                loggedInViewModel, exerciseViewModel, viewManagerModel, userDataAccessObject, userProfileFactory);
 
         LogoutController logoutController = LogoutControllerFactory.createLogoutController(viewManagerModel,
                 logoutViewModel);

@@ -10,8 +10,8 @@ public class ExerciseController {
         this.userExerciseUseCaseInteractor = userExerciseUseCaseInteractor;
     }
 
-    public void execute(String username, String exerciseType) {
-        ExerciseInputData exerciseInputData = new ExerciseInputData(username, exerciseType);
+    public void execute(String username, String exercisePerformed) {
+        ExerciseInputData exerciseInputData = new ExerciseInputData(username, exercisePerformed);
         userExerciseUseCaseInteractor.execute(exerciseInputData);
     }
 }

@@ -22,11 +22,6 @@ public class SignupPresenter implements SignupOutputBoundary {
     public void prepareSuccessView(SignupOutputData response) {
         // On success, switch to the login view.
         LoginState loginState = loginViewModel.getState();
-        loginState.resetUsername();
-        loginState.resetPassword();
-
-        SignupState signupState = signupViewModel.getState();
-        signupState.resetViewInputs();
 
         this.loginViewModel.setState(loginState);
         loginViewModel.firePropertyChanged();

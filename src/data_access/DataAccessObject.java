@@ -1,17 +1,19 @@
 package data_access;
 
+import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
-//import use_case.Exercise.ExerciseDataAccessInterface;
+import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
-import use_case.weekly_diet.WeeklyDietDataAccessInterface;
+import use_case.WeeklyDiet.WeeklyDietDataAccessInterface;
 
 import java.io.File;
 import java.io.*;
 import java.util.*;
 
-public class DataAccessObject implements LoginUserDataAccessInterface, SignupUserDataAccessInterface, WeeklyDietDataAccessInterface {
+public class DataAccessObject implements LoginUserDataAccessInterface, SignupUserDataAccessInterface,
+        WeeklyDietDataAccessInterface, ExerciseDataAccessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -103,10 +105,10 @@ public class DataAccessObject implements LoginUserDataAccessInterface, SignupUse
             return Float.parseFloat(String.valueOf(655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)));
         }
     }
-//    @Override
-//    public float get(UserProfile user) {
-//        return user.getWeight();
-//    }
+
+    public UserProfile get(String username) {
+        return accounts.get(username);
+    }
 
     @Override
     public boolean existsByName(String identifier) {
@@ -121,6 +123,31 @@ public class DataAccessObject implements LoginUserDataAccessInterface, SignupUse
         this.save();
     }
 
+    @Override
+    public void updateCalories(String username, float calories) {
+        UserProfile user = accounts.get(username);
+        float userCalories = user.getRecommendedDailyCalories();
+        user.setRecommendedDailyCalories(userCalories + calories);
+        accounts.replace(username, user);
+        this.save();
+//        UserProfile user = accounts.get(username);
+//        float userCalories = user.getRecommendedDailyCalories();
+//        user.setRecommendedDailyCalories(userCalories + calories);
+//
+//        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+//            String header = reader.readLine();
+//            String row;
+//            while ((row = reader.readLine()) != null) {
+//                String[] col = row.split(",");
+//                String name = String.valueOf(col[headers.get("username")]);
+//                if (name.equals(username)) {
+//                    col[headers.get("recommendedDailyCalories")] =
+//                }
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
     @Override
     public UserProfile getUserProfile(String username) {
         return accounts.get(username);

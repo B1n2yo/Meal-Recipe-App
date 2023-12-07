@@ -1,4 +1,4 @@
-package use_case.weekly_diet;
+package use_case.WeeklyDiet;
 
 import entity.UserProfile;
 
