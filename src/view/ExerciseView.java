@@ -40,7 +40,7 @@ public class ExerciseView  extends JPanel implements ActionListener, PropertyCha
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel exerciseInfo = new LabelTextPanel(
-                new JLabel("Enter your exercise: (type of exercise performed, time in minutes)"),
+                new JLabel("Enter your exercise: (type of exercise performed)"),
                 exerciseInputField);
         exerciseInfo.setForeground(FONT_COLOUR);
         exerciseInfo.setBackground(BACKGROUND_COLOUR);
@@ -59,8 +59,10 @@ public class ExerciseView  extends JPanel implements ActionListener, PropertyCha
                     ExerciseState currentState = exerciseViewModel.getState();
                     String username = currentState.getUsername();
                     String exercise = currentState.getExerciseName();
-
                     exerciseController.execute(username, exercise);
+                    ExerciseState newState = new ExerciseState();
+                    exerciseViewModel.setState(newState);
+                    exerciseInputField.setText("");
                 }
             }
         });
