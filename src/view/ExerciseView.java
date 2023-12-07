@@ -59,8 +59,10 @@ public class ExerciseView  extends JPanel implements ActionListener, PropertyCha
                     ExerciseState currentState = exerciseViewModel.getState();
                     String username = currentState.getUsername();
                     String exercise = currentState.getExerciseName();
-
                     exerciseController.execute(username, exercise);
+                    ExerciseState newState = new ExerciseState();
+                    exerciseViewModel.setState(newState);
+                    exerciseInputField.setText("");
                 }
             }
         });
