@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONException;
 import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
+
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -66,6 +66,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
                 }
                 String key = result.keys().nextElement();
                 ArrayList<String> value = result.get(key);
+                System.out.println(value);
 
                 MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)),
                         Float.parseFloat(value.get(2)));

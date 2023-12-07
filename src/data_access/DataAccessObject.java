@@ -1,6 +1,5 @@
 package data_access;
 
-import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
 import use_case.Exercise.ExerciseDataAccessInterface;

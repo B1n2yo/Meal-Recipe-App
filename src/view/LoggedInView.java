@@ -70,6 +70,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         logOut.setBackground(BACKGROUND_COLOUR);
         buttons.add(logOut);
         exercises = new JButton(loggedInViewModel.EXERCISE_BUTTON_LABEL);
+        exercises.setForeground(FONT_COLOUR);
+        exercises.setBackground(BACKGROUND_COLOUR);
         buttons.add(exercises);
 
         getRecipes.addActionListener(
