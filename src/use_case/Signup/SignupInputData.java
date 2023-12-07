@@ -49,4 +49,5 @@ public class SignupInputData {
     public ArrayList<String> getDietaryRestrictions() { return dietaryRestrictions; }
     public float getWeeklyBudget() { return weeklyBudget; }
     public int getRecommendedDailyCalories() { return recommendedDailyCalories; }
+    public ArrayList<String> getRecipes() { return recipes; }
 }
