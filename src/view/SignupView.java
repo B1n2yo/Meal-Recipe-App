@@ -247,7 +247,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         SignupState currentState = signupViewModel.getState();
                         currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
                         signupViewModel.setState(currentState);
-                        System.out.println(currentState.getUsername());
                     }
 
                     @Override
