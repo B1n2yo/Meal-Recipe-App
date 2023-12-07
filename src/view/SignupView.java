@@ -160,7 +160,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                                     currentState.getAge(),
                                     currentState.getDietaryRestrictions(),
                                     currentState.getWeeklyBudget(),
-                                    currentState.getRecommendedDailyCalories());
+                                    currentState.getRecommendedDailyCalories(),
+                                    currentState.getRecipes());
                         }
                     }
                 }

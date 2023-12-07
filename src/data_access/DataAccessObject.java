@@ -189,7 +189,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                         user.getUsername(), user.getPassword(), user.getGender(), String.valueOf(user.getWeight()),
                         String.valueOf(user.getHeight()), String.valueOf(user.getAge()),
                         user.getDietaryRestrictions().toString(), String.valueOf(user.getWeeklyBudget()),
-                        String.valueOf(user.getRecommendedDailyCalories()), user.getRecipes());
+                        String.valueOf(user.getRecommendedDailyCalories()), user.getRecipes().toString());
                 writer.write(line);
                 writer.newLine();
             }
