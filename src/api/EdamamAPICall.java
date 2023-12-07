@@ -14,21 +14,6 @@ public class EdamamAPICall {
     private static final String API_URL = "https://api.edamam.com/api/recipes/v2?type=public&app_id=981e8b83&" +
             "app_key=%202fba7f42e263a88f352970997e1158c3";
 
-//    public static void main(String[] args) throws IOException {
-//        // This is an examaple of how parameters should be given to the API
-//        Dictionary<String, Object> query = new Hashtable<>();
-//        query.put("mealType", "Breakfast");
-//        query.put("calories", "100-300");
-//
-//        try {
-//            RecipeUrl(query);
-//        } catch (JSONException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     //This method adds the parameters to the API URL from a dictionary
     private static String queryAdder(Dictionary<String, Object> query) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(API_URL)).newBuilder();
