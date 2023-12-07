@@ -129,9 +129,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                                             // the mouse has exited the label
                                         }
                                     });
-                                    JLabel recipeCals = new JLabel("Calories: " + diet.getCalories());
+                                    JLabel recipeCals = new JLabel("Calories (kcal): " + diet.getCalories());
                                     recipeCals.setForeground(FONT_COLOUR);
-                                    JLabel recipeProtein = new JLabel("Protein: " + diet.getProtein());
+                                    JLabel recipeProtein = new JLabel("Protein (g): " + diet.getProtein());
                                     recipeProtein.setForeground(FONT_COLOUR);
                                     meal.add(recipeName);
                                     meal.add(recipeDescription);
