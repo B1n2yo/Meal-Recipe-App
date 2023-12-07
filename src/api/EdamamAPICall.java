@@ -71,11 +71,12 @@ public class EdamamAPICall {
             String calories = recipe.getString("calories");
             ArrayList<String> recipeInfoList = new ArrayList<>();
 
-            String protein = recipe.getString("nutrients[PROCNT]");
-            recipeInfoList.add(protein);
-            System.out.println(protein);
+            JSONObject nutrients = recipe.getJSONObject("totalNutrients");
+            JSONObject PROCNT = nutrients.getJSONObject("PROCNT");
+            String protein = PROCNT.getString("quantity");
             recipeInfoList.add(url);
             recipeInfoList.add(calories);
+            recipeInfoList.add(protein);
 
             recipeInfo.put(label, recipeInfoList);
         }
