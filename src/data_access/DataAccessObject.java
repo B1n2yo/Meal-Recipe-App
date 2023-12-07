@@ -3,9 +3,6 @@ package data_access;
 import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
-import okhttp3.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
@@ -97,7 +94,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     ////////////////////////////
 
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
-                            dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+                            dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
                     accounts.put(username, user);
                 }
             }
@@ -115,6 +112,11 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
             return Float.parseFloat(String.valueOf(655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)));
         }
     }
+    @Override
+    public float get(UserProfile user) {
+        return user.getWeight();
+    }
+
     @Override
     public boolean existsByName(String identifier) {
         return accounts.containsKey(identifier);
@@ -134,7 +136,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
-    public void saveRecipe(MealInfo recipe, UserProfile userProfile) {
+    public void saveRecipe(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -145,7 +147,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        col[headers.get("recipes")] += recipe + ",";
+                        userProfile.addRecipe(recipeName);
                     }
                 }
                 this.save();
@@ -156,7 +158,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
-    public boolean recipeSaved(MealInfo recipe, UserProfile userProfile) {
+    public boolean recipeSaved(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -167,11 +169,8 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        String[] recipes = col[headers.get("recipes")].split(",");
-                        for (String r : recipes) {
-                            if (r.contentEquals(recipe.toString())) {
-                                return true;
-                            }
+                        if (userProfile.getRecipes().contains(recipeName)) {
+                            return true;
                         }
                     }
                 }

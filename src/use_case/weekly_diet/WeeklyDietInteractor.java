@@ -79,10 +79,8 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
 //                    Float.parseFloat(value.get(8)), value.get(9).split(","));
 
             MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)));
-            System.out.println(recipe.getName());
-            System.out.println(mealTypeInt);
 
-            if (!weeklyDietDataAccessObject.recipeSaved(recipe, userProfile)) {
+            if (!weeklyDietDataAccessObject.recipeSaved(recipe.getName(), userProfile)) {
                 if (mealTypeInt < 3) {
                     mealTypeInt++;
                 }
@@ -90,7 +88,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
                     mealTypeInt = 1;
                 }
                 weeklyDiet.add(recipe);
-                weeklyDietDataAccessObject.saveRecipe(recipe, userProfile);
+                weeklyDietDataAccessObject.saveRecipe(recipe.getName(), userProfile);
             }
 
         } while (weeklyDiet.size() < 21);
