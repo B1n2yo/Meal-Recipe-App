@@ -2,27 +2,18 @@ package use_case.Exercise;
 
 public class ExerciseOutputData {
 
-    private final String exerciseName;
-
-    private final int duration;
-    private final int caloriesBurned;
+    private final String exercisePerformed;
+    private final float caloriesBurned;
 
     private boolean useCaseFailed; // for invalid characters
 
-    public ExerciseOutputData(String exerciseName, int duration, int caloriesBurned) {
-        this.exerciseName = exerciseName;
-        this.duration = duration;
+    public ExerciseOutputData(String exercisePerformed, float caloriesBurned) {
+        this.exercisePerformed = exercisePerformed;
         this.caloriesBurned = caloriesBurned;
     }
 
-    public String getExercise() {
-        return exerciseName;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-    public int getCaloriesBurned() {
+    public String getExercisePerformed() { return exercisePerformed; }
+    public float getCaloriesBurned() {
         return caloriesBurned;
     }
 }

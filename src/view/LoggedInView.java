@@ -1,9 +1,8 @@
 package view;
 
 import entity.MealInfo;
-import interface_adapter.Login.LoginState;
 import interface_adapter.Logout.LogoutController;
-import interface_adapter.WeeklyDietController;
+import interface_adapter.WeeklyDiet.WeeklyDietController;
 import interface_adapter.Logged_in.LoggedInState;
 import interface_adapter.Logged_in.LoggedInViewModel;
 
@@ -11,8 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final LoggedInViewModel loggedInViewModel;
     private final WeeklyDietController weeklyDietController;
     private final LogoutController logoutController;
-
+    private final JButton exercises;
     private final JButton getRecipes;
     private final JButton logOut;
     private JDialog recipes;
@@ -44,6 +41,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         buttons.add(getRecipes);
         logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
         buttons.add(logOut);
+        exercises = new JButton(loggedInViewModel.EXERCISE_BUTTON_LABEL);
+        buttons.add(exercises);
 
         getRecipes.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
@@ -51,7 +50,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(getRecipes)) {
                             LoggedInState currentState = loggedInViewModel.getState();
-                            weeklyDietController.execute(currentState.getUsername());
+                            weeklyDietController.execute(currentState.getUsername(), false);
 
                             recipes = new JDialog();
                             ArrayList<MealInfo> weeklyDiet = currentState.getMealPlan();
@@ -82,6 +81,15 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     }
                 }
         );
+        exercises.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(exercises)) {
+                            LoggedInState currentState = loggedInViewModel.getState();
+                            weeklyDietController.execute(currentState.getUsername(), true);
+                        }
+                    }
+        });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
