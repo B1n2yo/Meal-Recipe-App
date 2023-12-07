@@ -12,10 +12,10 @@ public class SignupController {
     }
 
     public void execute(String username, String password1, String password2, String gender, float weight, float height,
-                        int age, ArrayList<String> dietaryRestrictions,  float weeklyBudget,
-                        int recommendedDailyCalories, ArrayList<String> recipes) {
+                        int age, ArrayList<String> dietaryRestrictions, int recommendedDailyCalories,
+                        ArrayList<String> recipes) {
         SignupInputData signupInputData = new SignupInputData(username, password1, password2, gender, weight, height,
-                age, dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
+                age, dietaryRestrictions, recommendedDailyCalories, recipes);
         this.userSignupUseCaseInteractor.execute(signupInputData);
     }
 }

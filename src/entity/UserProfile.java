@@ -10,12 +10,11 @@ public class UserProfile {
     private float height;
     private int age;
     private ArrayList<String> dietaryRestrictions;
-    private float weeklyBudget;
     private float recommendedDailyCalories;
     private ArrayList<String> recipes;
 
     public UserProfile(String username, String password, String gender, float weight, float height, int age,
-                       ArrayList<String> dietaryRestrictions, float weeklyBudget, float recommendedDailyCalories,
+                       ArrayList<String> dietaryRestrictions, float recommendedDailyCalories,
                        ArrayList<String> recipes) {
         this.username = username;
         this.password = password;
@@ -24,7 +23,6 @@ public class UserProfile {
         this.height = height;
         this.age = age;
         this.dietaryRestrictions = dietaryRestrictions;
-        this.weeklyBudget = weeklyBudget;
         this.recommendedDailyCalories = recommendedDailyCalories;
         this.recipes = recipes;
     }
@@ -46,10 +44,6 @@ public class UserProfile {
     public ArrayList<String> getDietaryRestrictions() {
         return this.dietaryRestrictions;
     }
-    public float getWeeklyBudget() {
-        return this.weeklyBudget;
-    }
-
     public float getRecommendedDailyCalories() {
         return this.recommendedDailyCalories;
     }

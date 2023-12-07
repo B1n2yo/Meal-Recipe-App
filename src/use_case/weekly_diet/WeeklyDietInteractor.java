@@ -33,7 +33,6 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
 
         String gender = userProfile.getGender();
         int age = userProfile.getAge();
-        float budget = userProfile.getWeeklyBudget();
         float height = userProfile.getHeight();
         float weight = userProfile.getWeight();
         ArrayList<String> dietaryRestrictions = userProfile.getDietaryRestrictions();

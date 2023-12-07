@@ -1,5 +1,6 @@
 package interface_adapter.Logout;
 
+import interface_adapter.Signup.SignupState;
 import interface_adapter.ViewManagerModel;
 import use_case.Logout.LogoutOutputBoundary;
 
@@ -11,6 +12,9 @@ public class LogoutPresenter implements LogoutOutputBoundary {
         this.viewManagerModel = viewManagerModel;
     }
     public void prepareSuccessView() {
+        LogoutState currentState = logoutViewModel.getState();
+        currentState.resetViewInputs();
+
         viewManagerModel.setActiveView(this.logoutViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

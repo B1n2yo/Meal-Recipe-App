@@ -27,22 +27,27 @@ public class SignupInteractor implements SignupInputBoundary {
         float height = signupInputData.getHeight();
         int age = signupInputData.getAge();
         ArrayList<String> dietaryRestrictions = signupInputData.getDietaryRestrictions();
-        float weeklyBudget = signupInputData.getWeeklyBudget();
         int recommendedDailyCalories = signupInputData.getRecommendedDailyCalories();
         ArrayList<String> recipes = signupInputData.getRecipes();
 
         if (userDataAccessObject.existsByName(username)) {
-            userPresenter.prepareFailView("User already exists.");
+            userPresenter.prepareFailViewUsername("User already exists.");
+        } else if (username.isEmpty()) {
+            userPresenter.prepareFailViewUsername("Please input a username.");
         } else if (!signupInputData.getPassword().equals(repeatPassword)) {
-            userPresenter.prepareFailView("Passwords don't match.");
+            userPresenter.prepareFailViewPassword("Passwords don't match.");
+        } else if (password.isEmpty()) {
+            userPresenter.prepareFailViewPassword("Please input a password.");
+        } else if (repeatPassword.isEmpty()) {
+            userPresenter.prepareFailViewPassword("Please repeat the password.");
         } else if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"))) {
-            userPresenter.prepareFailView("Input either \"Male\" or \"Female\".");
+            userPresenter.prepareFailViewGender("Input either \"Male\" or \"Female\".");
         } else if ((0.0 > weight) || (weight > 300.0)) {
-            userPresenter.prepareFailView("Enter a weight between 0.0kg and 300.0kg.");
+            userPresenter.prepareFailViewWeight("Enter a weight between 0.0kg and 300.0kg.");
         } else if ((0.0 > height) || (height > 250.0)) {
-            userPresenter.prepareFailView("Enter a height between 0.0cm and 250.0cm.");
+            userPresenter.prepareFailViewHeight("Enter a height between 0.0cm and 250.0cm.");
         } else if ((0 > age) || (age > 120)) {
-            userPresenter.prepareFailView("Enter an age between 0 years and 120 years.");
+            userPresenter.prepareFailViewAge("Enter an age between 0 years and 120 years.");
         } else {
             // check that the passwords are equal.
             assert !(userDataAccessObject.existsByName(username));
@@ -51,7 +56,7 @@ public class SignupInteractor implements SignupInputBoundary {
             assert ((0.0 > weight) || (weight > 300.0));
             assert  ((0.0 > height) || (height > 250.0));
             UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
-                    dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
+                    dietaryRestrictions, recommendedDailyCalories, recipes);
             userDataAccessObject.save(user);
 
             SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), false);

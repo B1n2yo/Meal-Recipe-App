@@ -20,7 +20,7 @@ public class LogoutViewModel extends ViewModel {
     public static final String SIGNUP_BUTTON_LABEL = "Sign up";
     public static final String CANCEL_BUTTON_LABEL = "Cancel";
 
-    private SignupState state = new SignupState();
+    private LogoutState state = new LogoutState();
 
     public LogoutViewModel() {
         super("sign up");
@@ -42,7 +42,7 @@ public class LogoutViewModel extends ViewModel {
         support.addPropertyChangeListener(listener);
     }
 
-    public SignupState getState() {
+    public LogoutState getState() {
         return this.state;
     }
 }

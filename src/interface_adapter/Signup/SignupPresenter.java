@@ -22,7 +22,12 @@ public class SignupPresenter implements SignupOutputBoundary {
     public void prepareSuccessView(SignupOutputData response) {
         // On success, switch to the login view.
         LoginState loginState = loginViewModel.getState();
-        loginState.setUsername(response.getUsername());
+        loginState.resetUsername();
+        loginState.resetPassword();
+
+        SignupState signupState = signupViewModel.getState();
+        signupState.resetViewInputs();
+
         this.loginViewModel.setState(loginState);
         loginViewModel.firePropertyChanged();
 
@@ -30,9 +35,34 @@ public class SignupPresenter implements SignupOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
     @Override
-    public void prepareFailView(String error) {
+    public void prepareFailViewUsername(String error) {
         SignupState signupState = signupViewModel.getState();
         signupState.setUsernameError(error);
+        signupViewModel.firePropertyChanged();
+    }
+    public void prepareFailViewPassword(String error) {
+        SignupState signupState = signupViewModel.getState();
+        signupState.setPasswordError(error);
+        signupViewModel.firePropertyChanged();
+    }
+    public void prepareFailViewGender(String error) {
+        SignupState signupState = signupViewModel.getState();
+        signupState.setGenderError(error);
+        signupViewModel.firePropertyChanged();
+    }
+    public void prepareFailViewWeight(String error) {
+        SignupState signupState = signupViewModel.getState();
+        signupState.setWeightError(error);
+        signupViewModel.firePropertyChanged();
+    }
+    public void prepareFailViewHeight(String error) {
+        SignupState signupState = signupViewModel.getState();
+        signupState.setHeightError(error);
+        signupViewModel.firePropertyChanged();
+    }
+    public void prepareFailViewAge(String error) {
+        SignupState signupState = signupViewModel.getState();
+        signupState.setAgeError(error);
         signupViewModel.firePropertyChanged();
     }
 }

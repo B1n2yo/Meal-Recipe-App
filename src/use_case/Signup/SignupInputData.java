@@ -11,13 +11,12 @@ public class SignupInputData {
     final private float height;
     final private int age;
     final private ArrayList<String> dietaryRestrictions;
-    final private float weeklyBudget;
     final private int recommendedDailyCalories;
     private ArrayList<String> recipes;
 
     public SignupInputData(String username, String password, String repeatPassword, String gender, float weight,
-                           float height, int age, ArrayList<String> dietaryRestrictions, float weeklyBudget,
-                           int recommendedDailyCalories, ArrayList<String> recipes) {
+                           float height, int age, ArrayList<String> dietaryRestrictions, int recommendedDailyCalories,
+                           ArrayList<String> recipes) {
         this.username = username;
         this.password = password;
         this.repeatPassword = repeatPassword;
@@ -26,7 +25,6 @@ public class SignupInputData {
         this.height = height;
         this.age = age;
         this.dietaryRestrictions = dietaryRestrictions;
-        this.weeklyBudget = weeklyBudget;
         this.recommendedDailyCalories = recommendedDailyCalories;
         this.recipes = recipes;
     }
@@ -47,7 +45,6 @@ public class SignupInputData {
     public float getHeight() { return height; }
     public int getAge() { return age; }
     public ArrayList<String> getDietaryRestrictions() { return dietaryRestrictions; }
-    public float getWeeklyBudget() { return weeklyBudget; }
     public int getRecommendedDailyCalories() { return recommendedDailyCalories; }
     public ArrayList<String> getRecipes() { return recipes; }
 }
