@@ -1,6 +1,9 @@
 package use_case.Login;
 
 public interface LoginOutputBoundary {
-    void prepareSuccessView(LoginOutputData user);
-    void prepareFailView(String error);
+    void prepareSuccessViewForLogin(LoginOutputData user);
+
+    void prepareSuccessViewForSwitch();
+    void prepareFailViewUsername(String error);
+    void prepareFailViewPassword(String error);
 }

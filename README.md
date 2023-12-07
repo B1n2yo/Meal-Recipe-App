@@ -6,12 +6,11 @@ Maintaining a good meal balance is crucial to one's health and well-being. Howev
 and our ability to prepare balanced meals vary from individual to individual, from day to day. Our team proposes
 a solution to this struggle in the form of a recipe recommender app. Given the user's specified diet and other
 restrictions/nutriment requirements, this program will generate a weekly plan for the user, providing information
-about nutritious value, cost, cooking instructions, and time required for preparation. The user must create a profile
+about ingredients, nutritious value, and cooking instructions in the form of an url to the recipes. The user must create a profile
 before they are able to start generating recipes; they will be prompted to enter their measurements and
-list of preferences in a short survey. The user will be able to retake the survey at any time to change
-their user information.
+list of preferences in a short survey.
 
-Domain: Weight tracker, recipe organizer and price calculator (maybe).
+Domain: recipe organizer
 
 User Stories:
 
@@ -33,40 +32,3 @@ his dietary needs. [Jack’s Story]
 Albert has just been kicked out of the family home and is on his own for the first time. Not knowing the first thing about cooking 
 and meal prep, he turns to a recipe organizer program for help. Being as clueless as he is, Albert wants to work with as little
 ingredients as possible. With this information, the program generates recipes for Albert. [Iris’ Story]
-
-Proposed Entities for the Domain:
-
-Meal
-(nutrition facts)
--int calories
--float carbohydrates
--float fat
--float protein
--float vitamins
--float sodium
--float cholesterol
--float Potassium
--float Calcium
--float Zinc
--float Magnesium
--float dailyValue
-
-UserProfile
--float weight
--float height
--int age
--list[string] dietary restrictions
--int weeklyBudget
--float BMI
--int rec. daily calories
-
-Recommender
--string recipe URL
--int calories per serving
--float protein per serving
--float fat per serving
--float ingredient price
--list[string] ingredients
-
-Scheduled Meeting Times + Mode of Communication: Meeting time outside of lab: Saturday afternoon
-Mode of Communication: Discord / Instagram 

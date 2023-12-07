@@ -1,4 +1,5 @@
 package interface_adapter.Signup;
+
 import use_case.Signup.SignupInputBoundary;
 import use_case.Signup.SignupInputData;
 
@@ -12,10 +13,10 @@ public class SignupController {
     }
 
     public void execute(String username, String password1, String password2, String gender, float weight, float height,
-                        int age, ArrayList<String> dietaryRestrictions,  float weeklyBudget,
-                        int recommendedDailyCalories) {
+                        int age, ArrayList<String> dietaryRestrictions, int recommendedDailyCalories,
+                        ArrayList<String> recipes) {
         SignupInputData signupInputData = new SignupInputData(username, password1, password2, gender, weight, height,
-                age, dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+                age, dietaryRestrictions, recommendedDailyCalories, recipes);
         this.userSignupUseCaseInteractor.execute(signupInputData);
     }
 }

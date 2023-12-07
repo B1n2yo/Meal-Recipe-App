@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 public class EdamamAPICall {
 
@@ -17,40 +14,39 @@ public class EdamamAPICall {
     private static final String API_URL = "https://api.edamam.com/api/recipes/v2?type=public&app_id=981e8b83&" +
             "app_key=%202fba7f42e263a88f352970997e1158c3";
 
-//    public static void main(String[] args) throws IOException {
-//        // This is an examaple of how parameters should be given to the API
-//        Dictionary<String, Object> query = new Hashtable<>();
-//        query.put("mealType", "Breakfast");
-//        query.put("calories", "100-300");
-//
-//        try {
-//            RecipeUrl(query);
-//        } catch (JSONException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     //This method adds the parameters to the API URL from a dictionary
-    private static String queryAdder(Dictionary query) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(API_URL).newBuilder();
-        Enumeration k = query.keys();
-        Enumeration v = query.elements();
+    private static String queryAdder(Dictionary<String, Object> query) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(API_URL)).newBuilder();
 
-        for (int i = 0; i < query.size(); i++) {
-            urlBuilder.addQueryParameter((String) k.nextElement(), (String) v.nextElement());
+        Enumeration<String> keys = query.keys();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+
+            if ("health".equals(key)) {
+                Object value = query.get(key);
+                if (value instanceof ArrayList) {
+                    ArrayList<String> health = (ArrayList<String>) value;
+                    if (health.contains("")) {
+                        continue;
+                    } else {
+                        for (String s : health) {
+                            urlBuilder.addQueryParameter("health", s);
+                        }
+                    }
+                }
+            } else {
+                urlBuilder.addQueryParameter(key, (String) query.get(key));
+            }
         }
 
-        String url = urlBuilder.build().toString();
-        return url;
+        return urlBuilder.build().toString();
     }
 
     // This method filters the response body to get the recipe name and URL. Other information can be added as needed.
     private static Dictionary<String, ArrayList<String>> filterResponseBody(String responseBody) {
         Dictionary<String, ArrayList<String>> recipeInfo = new Hashtable<>();
         JSONObject jsonObject = JSONObject.parseObject(responseBody);
-        System.out.println(responseBody);
         JSONArray hits = jsonObject.getJSONArray("hits");
         for (int i = 0; i < hits.size(); i++) {
             JSONObject hit = hits.getJSONObject(i);
@@ -59,8 +55,13 @@ public class EdamamAPICall {
             String url = recipe.getString("url");
             String calories = recipe.getString("calories");
             ArrayList<String> recipeInfoList = new ArrayList<>();
+
+            JSONObject nutrients = recipe.getJSONObject("totalNutrients");
+            JSONObject PROCNT = nutrients.getJSONObject("PROCNT");
+            String protein = PROCNT.getString("quantity");
             recipeInfoList.add(url);
             recipeInfoList.add(calories);
+            recipeInfoList.add(protein);
 
             recipeInfo.put(label, recipeInfoList);
         }

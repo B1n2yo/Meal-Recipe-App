@@ -2,6 +2,7 @@ package app;
 
 import entity.CommonUserProfileFactory;
 import entity.UserProfileFactory;
+import interface_adapter.Signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.Logged_in.LoggedInViewModel;
 import interface_adapter.Login.LoginController;
@@ -20,15 +21,16 @@ public class LoginUseCaseFactory {
 
     /** Prevent instantiation. */
     private LoginUseCaseFactory() {}
-
     public static LoginView create(
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
+            SignupViewModel signupViewModel,
             LoginUserDataAccessInterface userDataAccessObject) {
 
         try {
-            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);
+            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel,
+                    signupViewModel, userDataAccessObject);
             return new LoginView(loginViewModel, loginController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -41,10 +43,12 @@ public class LoginUseCaseFactory {
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
+            SignupViewModel signupViewModel,
             LoginUserDataAccessInterface userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel, loginViewModel);
+        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel,
+                loginViewModel, signupViewModel);
 
         UserProfileFactory userFactory = new CommonUserProfileFactory();
 

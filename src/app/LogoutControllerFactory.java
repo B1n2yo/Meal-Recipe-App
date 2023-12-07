@@ -7,7 +7,6 @@ import interface_adapter.ViewManagerModel;
 import use_case.Logout.LogoutInputBoundary;
 import use_case.Logout.LogoutInteractor;
 import use_case.Logout.LogoutOutputBoundary;
-import use_case.weekly_diet.WeeklyDietDataAccessInterface;
 
 import java.io.IOException;
 

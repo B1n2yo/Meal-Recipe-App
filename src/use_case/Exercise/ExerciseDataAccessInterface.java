@@ -1,7 +1,11 @@
 package use_case.Exercise;
 
-import data_access.ExerciseData;
+import entity.UserProfile;
 
 public interface ExerciseDataAccessInterface {
-    ExerciseData call(String username, String exercisePerformed);
+    UserProfile get(String username);
+
+    void save(UserProfile user);
+
+    void updateCalories(String username, float calories);
 }

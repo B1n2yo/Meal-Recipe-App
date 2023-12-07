@@ -10,11 +10,8 @@ import interface_adapter.Logout.LogoutController;
 import interface_adapter.Logout.LogoutViewModel;
 import interface_adapter.Signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-
-//import view.LoggedInView;
-import interface_adapter.WeeklyDietController;
+import interface_adapter.WeeklyDiet.WeeklyDietController;
 import view.*;
-//import view.LoggedInView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,19 +20,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-            // Create and show the GUI
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
         // The main application window.
         JFrame application = new JFrame("Meal-Recipe-App");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        application.setLocation(400, 200);
 
         CardLayout cardLayout = new CardLayout();
 
@@ -68,17 +59,18 @@ public class Main {
                 userDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, signupViewModel,
         userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel, userDataAccessObject);
+        ExerciseView exerciseView = ExerciseUseCaseFactory.create(viewManagerModel, exerciseViewModel,
+                loggedInViewModel, userDataAccessObject);
         views.add(exerciseView, exerciseView.viewName);
 
         UserProfileFactory userProfileFactory = new CommonUserProfileFactory();
 
         WeeklyDietController weeklyDietController = WeeklyDietControllerFactory.createWeeklyDietController(
-                loggedInViewModel, viewManagerModel, userDataAccessObject, userProfileFactory);
+                loggedInViewModel, exerciseViewModel, viewManagerModel, userDataAccessObject, userProfileFactory);
 
         LogoutController logoutController = LogoutControllerFactory.createLogoutController(viewManagerModel,
                 logoutViewModel);
@@ -86,8 +78,7 @@ public class Main {
         LoggedInView loggedInView = new LoggedInView(weeklyDietController, loggedInViewModel, logoutController);
         views.add(loggedInView, loggedInView.viewName);
 
-        viewManagerModel.setActiveView(signupView.viewName);
-//        viewManagerModel.setActiveView(exerciseView.viewName); test the exercise view panel
+        viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();

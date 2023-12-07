@@ -47,4 +47,8 @@ public class LoginState {
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
     }
+
+    public void resetUsername() { this.username = ""; }
+
+    public void resetPassword() { this.password = ""; }
 }

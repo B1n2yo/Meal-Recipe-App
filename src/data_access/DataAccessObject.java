@@ -1,21 +1,18 @@
 package data_access;
 
-import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
-import okhttp3.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
-import use_case.weekly_diet.WeeklyDietDataAccessInterface;
+import use_case.WeeklyDiet.WeeklyDietDataAccessInterface;
 
 import java.io.File;
 import java.io.*;
 import java.util.*;
 
-public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserDataAccessInterface, SignupUserDataAccessInterface, WeeklyDietDataAccessInterface {
+public class DataAccessObject implements LoginUserDataAccessInterface, SignupUserDataAccessInterface,
+        WeeklyDietDataAccessInterface, ExerciseDataAccessInterface {
     private final File csvFile;
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -33,9 +30,8 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
         this.headers.put("height", 4);
         this.headers.put("age", 5);
         this.headers.put("dietaryRestrictions", 6);
-        this.headers.put("weeklyBudget", 7);
-        this.headers.put("recommendedDailyCalories", 8);
-        this.headers.put("recipes", 9);
+        this.headers.put("recommendedDailyCalories", 7);
+        this.headers.put("recipes", 8);
 
         if (csvFile.length() == 0) {
             save();
@@ -45,28 +41,52 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                 String header = reader.readLine();
 
                 // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-                assert header.equals("username,password,gender,weight,height,age,dietaryRestrictions,weeklyBudget," +
+                assert header.equals("username,password,gender,weight,height,age,dietaryRestrictions," +
                         "recommendedDailyCalories,recipes");
 
                 String row;
                 while ((row = reader.readLine()) != null) {
-                    String[] col = row.split(",");
+
+                    String[] col = new String[9];
+                    String substring = "";
+                    boolean inList = false;
+                    int colNum = 0;
+                    for (int i = 0; i < row.length(); i++) {
+                        if (row.charAt(i) == '[') {
+                            inList = true;
+                        }
+                        if (row.charAt(i) == ']') {
+                            inList = false;
+                        }
+                        if (!inList && row.charAt(i) == ',') {
+                            col[colNum] = substring;
+                            colNum++;
+                            substring = "";
+                        }
+                        else {
+                            substring += row.charAt(i);
+                        }
+                    }
+                    col[colNum] = substring;
+
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
                     String gender = String.valueOf(col[headers.get("gender")]);
                     float weight = Float.parseFloat(col[headers.get("weight")]);
                     float height = Float.parseFloat(col[headers.get("height")]);
                     int age = Integer.parseInt(col[headers.get("age")]);
-                    ////////////////////////////
                     String stringRepresentation = String.valueOf(col[headers.get("dietaryRestrictions")]);
                     String[] elements = stringRepresentation.replaceAll("\\[|\\]",
                             "").split(", ");
                     ArrayList<String> dietaryRestrictions = new ArrayList<>(Arrays.asList(elements));
-                    ////////////////////////////
-                    float weeklyBudget = Float.parseFloat(col[headers.get("weeklyBudget")]);
                     float recommendedDailyCalories = Float.parseFloat(col[headers.get("recommendedDailyCalories")]);
+                    String stringRecipes = String.valueOf(col[headers.get("recipes")]);
+                    String[] recipesElements = stringRecipes.replaceAll("\\[|\\]",
+                            "").split(", ");
+                    ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipesElements));
+
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
-                            dietaryRestrictions, weeklyBudget, recommendedDailyCalories);
+                            dietaryRestrictions, recommendedDailyCalories, recipes);
                     accounts.put(username, user);
                 }
             }
@@ -84,6 +104,11 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
             return Float.parseFloat(String.valueOf(655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)));
         }
     }
+
+    public UserProfile get(String username) {
+        return accounts.get(username);
+    }
+
     @Override
     public boolean existsByName(String identifier) {
         return accounts.containsKey(identifier);
@@ -98,12 +123,20 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
+    public void updateCalories(String username, float calories) {
+        UserProfile user = accounts.get(username);
+        float userCalories = user.getRecommendedDailyCalories();
+        user.setRecommendedDailyCalories(userCalories + calories);
+        accounts.replace(username, user);
+        this.save();
+    }
+    @Override
     public UserProfile getUserProfile(String username) {
         return accounts.get(username);
     }
 
     @Override
-    public void saveRecipe(MealInfo recipe, UserProfile userProfile) {
+    public void saveRecipe(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -114,7 +147,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        col[headers.get("recipes")] += recipe + ",";
+                        userProfile.addRecipe(recipeName);
                     }
                 }
                 this.save();
@@ -125,7 +158,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
     }
 
     @Override
-    public boolean recipeSaved(MealInfo recipe, UserProfile userProfile) {
+    public boolean recipeSaved(String recipeName, UserProfile userProfile) {
         if (csvFile.length() == 0) {
             this.save();
         } else {
@@ -136,11 +169,8 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     if (username.equals(userProfile.getUsername())) {
-                        String[] recipes = col[headers.get("recipes")].split(",");
-                        for (String r : recipes) {
-                            if (r.contentEquals(recipe.toString())) {
-                                return true;
-                            }
+                        if (userProfile.getRecipes().contains(recipeName)) {
+                            return true;
                         }
                     }
                 }
@@ -161,62 +191,16 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
 
             for (UserProfile user : accounts.values()) {
                 String stringDietaryRestriction = "";
-                String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         user.getUsername(), user.getPassword(), user.getGender(), String.valueOf(user.getWeight()),
                         String.valueOf(user.getHeight()), String.valueOf(user.getAge()),
-                        user.getDietaryRestrictions().toString(), String.valueOf(user.getWeeklyBudget()),
-                        String.valueOf(user.getRecommendedDailyCalories()), " ");
+                        user.getDietaryRestrictions().toString(), String.valueOf(user.getRecommendedDailyCalories()),
+                        user.getRecipes().toString());
                 writer.write(line);
                 writer.newLine();
             }
             writer.close();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public ExerciseData call(String username, String exercisePerformed) {
-        try{
-            UserProfile user = getUserProfile(username);
-            String query =
-                    "{\n" +
-                            "\"query\" : \"" + exercisePerformed + "\",\n" +
-                            "\"gender\" : \"" + user.getGender() + "\",\n" +
-                            "\"weight_kg\" : \"" + user.getWeight() + "\",\n" +
-                            "\"height_cm\" : \"" + user.getHeight() + "\",\n" +
-                            "\"age\" : \"" + user.getAge() + "\"\n" +
-                            "}";
-            System.out.println(query);
-            OkHttpClient client = new OkHttpClient();
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, query);
-            Request request = new Request.Builder()
-                    .url("https://trackapi.nutritionix.com/v2/natural/exercise")
-                    .post(body)
-                    .addHeader("content-type", "application/json")
-                    .addHeader("x-app-id", "a850fd03")
-                    .addHeader("x-app-key", "67f8395ca094e8e9fdeee99729678c18")
-                    .build();
-            Response response = client.newCall(request).execute();
-            System.out.println(request);
-//            System.out.println(response);
-            if (response.code() == 200) {
-
-                // This is the string representation of the response body (looks exactly like a JSON file).
-                String responseBody = response.body().string();
-                JSONObject JSONResponseBody = new JSONObject(responseBody);
-                JSONArray exerciseInfo = JSONResponseBody.getJSONArray("exercises");
-                if (exerciseInfo.isEmpty()) {
-                    return null;
-                } else {
-                    JSONObject data = exerciseInfo.getJSONObject(0);
-                    return new ExerciseData(data.getString("user_input"), data.getInt("duration_min"), data.getInt("nf_calories"));
-                }
-            }
-            System.out.println("Response Error: " + response.code());
-            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

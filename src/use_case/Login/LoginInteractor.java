@@ -6,27 +6,32 @@ public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
     final LoginOutputBoundary loginPresenter;
 
-    public LoginInteractor(LoginUserDataAccessInterface userDataAccessInterface,
-                           LoginOutputBoundary loginOutputBoundary) {
-        this.userDataAccessObject = userDataAccessInterface;
-        this.loginPresenter = loginOutputBoundary;
+    public LoginInteractor(LoginUserDataAccessInterface userDataAccessObject,
+                           LoginOutputBoundary loginPresenter) {
+        this.userDataAccessObject = userDataAccessObject;
+        this.loginPresenter = loginPresenter;
     }
 
     @Override
     public void execute(LoginInputData loginInputData) {
         String username = loginInputData.getUsername();
         String password = loginInputData.getPassword();
-        if (!userDataAccessObject.existsByName(username)) {
-            loginPresenter.prepareFailView(username + ": Account does not exist.");
+        boolean switchToSignUp = loginInputData.getSwitchToSignUp();
+        if (switchToSignUp) {
+            loginPresenter.prepareSuccessViewForSwitch();
         } else {
-            String pwd = userDataAccessObject.getUserProfile(username).getPassword();
-            if (!password.equals(pwd)) {
-                loginPresenter.prepareFailView("Incorrect password for " + username + ".");
+            if (!userDataAccessObject.existsByName(username)) {
+                loginPresenter.prepareFailViewUsername(username + ": Account does not exist.");
             } else {
-                UserProfile user = userDataAccessObject.getUserProfile(username);
+                String pwd = userDataAccessObject.getUserProfile(username).getPassword();
+                if (!password.equals(pwd)) {
+                    loginPresenter.prepareFailViewPassword("Incorrect password for " + username + ".");
+                } else {
+                    UserProfile user = userDataAccessObject.getUserProfile(username);
 
-                LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), false);
-                loginPresenter.prepareSuccessView(loginOutputData);
+                    LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), false);
+                    loginPresenter.prepareSuccessViewForLogin(loginOutputData);
+                }
             }
         }
     }

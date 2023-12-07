@@ -4,17 +4,13 @@ public class ExerciseState {
 
     private String username = "";
     private String exerciseName = "";
-
-    private int duration = 0;
-
-    private int caloriesBurned = 0;
-
+    private String successMessage = null;
     public ExerciseState(ExerciseState copy) {
-        exerciseName = copy.exerciseName;
+        this.username = copy.username;
+        this.exerciseName = copy.exerciseName;
+        this.successMessage = copy.successMessage;
     }
-
-    public ExerciseState() {
-    }
+    public ExerciseState() {}
 
     public String getUsername() {
         return username;
@@ -24,28 +20,11 @@ public class ExerciseState {
         this.username = username;
     }
 
-    public String getExerciseName() {
-        return exerciseName;
-    }
+    public String getSuccessMessage() { return successMessage; }
 
+    public void setSuccessMessage(String successMessage) { this.successMessage = successMessage; }
 
-    public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
-    }
+    public String getExerciseName() { return exerciseName; }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public int getCaloriesBurned() {
-        return caloriesBurned;
-    }
-
-    public void setCaloriesBurned(int caloriesBurned) {
-        this.caloriesBurned = caloriesBurned;
-    }
+    public void setExerciseName(String exerciseName) { this.exerciseName = exerciseName; }
 }

@@ -12,6 +12,7 @@ public class LoggedInViewModel extends ViewModel {
 
     public static final String LOGOUT_BUTTON_LABEL = "Log out";
     public static final String GET_RECIPES_BUTTON_LABEL = "Generate meal plan";
+    public static final String EXERCISE_BUTTON_LABEL = "Enter an exercise";
     private String loggedInUser;
 
     public LoggedInViewModel() {

@@ -15,7 +15,6 @@ public class SignupViewModel extends ViewModel {
     public static final String HEIGHT_LABEL = "Height (cm):";
     public static final String AGE_LABEL = "Age:";
     public static final String DIETARY_RESTRICTIONS_LABEL = "Select your dietary restrictions";
-    public static final String WEEKLY_BUDGET_LABEL = "Enter your weekly budget";
     public static final String SIGNUP_BUTTON_LABEL = "Sign up";
 
     private SignupState state = new SignupState();
