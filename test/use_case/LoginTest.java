@@ -89,7 +89,7 @@ public class LoginTest {
 
             @Override
             public void prepareFailViewUsername(String error) {
-                assertEquals(error, "fred" + ": Account does not exist.");
+                assertEquals(error, "fred" + ": Account does not exist (Case Sensitive).");
 
             }
 
