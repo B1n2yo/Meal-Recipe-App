@@ -42,7 +42,8 @@ public class EdamamAPICall {
                 Object value = query.get(key);
                 if (value instanceof ArrayList) {
                     ArrayList<String> health = (ArrayList<String>) value;
-                    if (health.isEmpty()) {
+                    System.out.println(health.contains(""));
+                    if (health.contains("")) {
                         continue;
                     } else {
                         for (String s : health) {
