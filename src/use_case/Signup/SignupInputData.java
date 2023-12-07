@@ -13,7 +13,7 @@ public class SignupInputData {
     final private ArrayList<String> dietaryRestrictions;
     final private float weeklyBudget;
     final private int recommendedDailyCalories;
-    final private ArrayList<String> recipes;
+    private ArrayList<String> recipes;
 
     public SignupInputData(String username, String password, String repeatPassword, String gender, float weight,
                            float height, int age, ArrayList<String> dietaryRestrictions, float weeklyBudget,

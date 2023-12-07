@@ -68,6 +68,7 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                             substring += row.charAt(i);
                         }
                     }
+                    col[colNum] = substring;
 
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
@@ -83,10 +84,13 @@ public class DataAccessObject implements ExerciseDataAccessInterface, LoginUserD
                     ////////////////////////////
                     float weeklyBudget = Float.parseFloat(col[headers.get("weeklyBudget")]);
                     float recommendedDailyCalories = Float.parseFloat(col[headers.get("recommendedDailyCalories")]);
+                    ////////////////////////////
                     String stringRecipes = String.valueOf(col[headers.get("recipes")]);
                     String[] recipesElements = stringRecipes.replaceAll("\\[|\\]",
                             "").split(", ");
+                    System.out.println(col);
                     ArrayList<String> recipes = new ArrayList<>(Arrays.asList(recipesElements));
+                    ////////////////////////////
                     UserProfile user = userProfileFactory.create(username, password, gender, weight, height, age,
                             dietaryRestrictions, weeklyBudget, recommendedDailyCalories, recipes);
                     accounts.put(username, user);
