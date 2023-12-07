@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 public class EdamamAPICall {
 
@@ -33,8 +30,8 @@ public class EdamamAPICall {
 //    }
 
     //This method adds the parameters to the API URL from a dictionary
-    private static String queryAdder(Dictionary<String, String> query) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(API_URL).newBuilder();
+    private static String queryAdder(Dictionary<String, Object> query) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(API_URL)).newBuilder();
 
         Enumeration<String> keys = query.keys();
 
@@ -43,14 +40,13 @@ public class EdamamAPICall {
 
             if ("health".equals(key)) {
                 Object value = query.get(key);
-                if (value instanceof ArrayList) {
-                    ArrayList<String> health = (ArrayList<String>) value;
-                    for (int i = 0; i < health.size(); i++) {
-                        urlBuilder.addQueryParameter(key, health.get(i));
-                    }
+                ArrayList<String> health = (ArrayList<String>) value;
+                for (String s : health) {
+                    urlBuilder.addQueryParameter("health", s);
                 }
+
             } else {
-                urlBuilder.addQueryParameter(key, query.get(key));
+                urlBuilder.addQueryParameter(key, (String) query.get(key));
             }
         }
 
