@@ -9,7 +9,6 @@ import use_case.Exercise.ExerciseDataAccessInterface;
 import use_case.Exercise.ExerciseInputBoundary;
 import use_case.Exercise.ExerciseInteractor;
 import use_case.Exercise.ExerciseOutputBoundary;
-import view.ExerciseView;
 
 import javax.swing.*;
 import java.io.IOException;
