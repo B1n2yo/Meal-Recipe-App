@@ -24,6 +24,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
     private final JTextField genderInputField = new JTextField(15);
+
     private final JTextField weightInputField = new JTextField(15);
     private final JTextField heightInputField = new JTextField(15);
     private final JTextField ageInputField = new JTextField(15);
@@ -36,6 +37,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JButton signUp;
 
     private final JButton back;
+
     
     // Colours
     private final java.awt.Color FONT_COLOUR = new java.awt.Color(222, 247, 250);
@@ -247,7 +249,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         SignupState currentState = signupViewModel.getState();
                         currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
                         signupViewModel.setState(currentState);
-                        System.out.println(currentState.getUsername());
                     }
 
                     @Override
@@ -296,7 +297,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             @Override
             public void keyTyped(KeyEvent e) {
                 SignupState currentState = signupViewModel.getState();
-                currentState.setGender(genderInputField.getText() + e.getKeyChar());
+                char c = e.getKeyChar();
+                if (Character.isDigit(c)) {
+                    e.consume();
+                }
+                else {
+                    currentState.setGender(genderInputField.getText() + e.getKeyChar());
+                }
                 signupViewModel.setState(currentState);
             }
 
@@ -315,7 +322,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setWeight(Float.valueOf(weightInputField.getText() + e.getKeyChar()));
+                        char c = e.getKeyChar();
+                        if (!Character.isDigit(c)) {
+                            e.consume();
+                        }
+                        else {
+                            currentState.setWeight(Float.valueOf(weightInputField.getText() + e.getKeyChar()));
+                        }
                         signupViewModel.setState(currentState);
                     }
 
@@ -335,7 +348,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setHeight(Float.valueOf(heightInputField.getText() + e.getKeyChar()));
+                        char c = e.getKeyChar();
+                        if (!Character.isDigit(c)) {
+                            e.consume();
+                        }
+                        else {
+                            currentState.setHeight(Float.valueOf(heightInputField.getText() + e.getKeyChar()));
+                        }
                         signupViewModel.setState(currentState);
                     }
 
@@ -355,7 +374,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setAge(Integer.valueOf(ageInputField.getText() + e.getKeyChar()));
+                        char c = e.getKeyChar();
+                        if (!Character.isDigit(c)) {
+                            e.consume();
+                        }
+                        else {
+                            currentState.setAge(Integer.valueOf(ageInputField.getText() + e.getKeyChar()));
+                        }
                         signupViewModel.setState(currentState);
                     }
 

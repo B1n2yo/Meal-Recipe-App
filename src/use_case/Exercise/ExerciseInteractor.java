@@ -2,6 +2,8 @@ package use_case.Exercise;
 import api.NutritionixAPICall;
 import entity.UserProfile;
 
+import java.util.Objects;
+
 public class ExerciseInteractor implements ExerciseInputBoundary {
 
     final ExerciseDataAccessInterface dataAccessObject;
@@ -20,11 +22,16 @@ public class ExerciseInteractor implements ExerciseInputBoundary {
         UserProfile user = dataAccessObject.get(username);
 
         NutritionixAPICall apicall = new NutritionixAPICall();
-        float caloriesBurned = apicall.caloriesBurned(exercisePerformed, user);
-        dataAccessObject.updateCalories(username, caloriesBurned);
+        if (!Objects.equals(exercisePerformed, "")) {
+            float caloriesBurned = apicall.caloriesBurned(exercisePerformed, user);
+            dataAccessObject.updateCalories(username, caloriesBurned);
+            ExerciseOutputData exerciseOutputData = new ExerciseOutputData(exercisePerformed, caloriesBurned);
+            exercisePresenter.prepareSuccessView(exerciseOutputData);
+        }
+        else {
+            exercisePresenter.prepareFailView("No exercises were recognized in your request.");
+        }
 
-        ExerciseOutputData exerciseOutputData = new ExerciseOutputData(exercisePerformed, caloriesBurned);
-        exercisePresenter.prepareSuccessView(exerciseOutputData);
 
 //        String username = exerciseInputData.getUsername();
 //        String exercisePerformed = exerciseInputData.getExercisePerformed();
