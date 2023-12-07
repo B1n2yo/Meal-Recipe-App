@@ -30,28 +30,28 @@ public class EdamamAPICall {
 //    }
 
     //This method adds the parameters to the API URL from a dictionary
-//    private static String queryAdder(Dictionary<String, Object> query) {
-//        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(API_URL)).newBuilder();
-//
-//        Enumeration<String> keys = query.keys();
-//
-//        while (keys.hasMoreElements()) {
-//            String key = keys.nextElement();
-//
-//            if ("health".equals(key)) {
-//                Object value = query.get(key);
-//                ArrayList<String> health = (ArrayList<String>) value;
-//                for (String s : health) {
-//                    urlBuilder.addQueryParameter("health", s);
-//                }
-//
-//            } else {
-//                urlBuilder.addQueryParameter(key, (String) query.get(key));
-//            }
-//        }
-//
-//        return urlBuilder.build().toString();
-//    }
+    private static String queryAdder(Dictionary<String, Object> query) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(API_URL)).newBuilder();
+
+        Enumeration<String> keys = query.keys();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+
+            if ("health".equals(key)) {
+                Object value = query.get(key);
+                ArrayList<String> health = (ArrayList<String>) value;
+                for (String s : health) {
+                    urlBuilder.addQueryParameter("health", s);
+                }
+
+            } else {
+                urlBuilder.addQueryParameter(key, (String) query.get(key));
+            }
+        }
+
+        return urlBuilder.build().toString();
+    }
 
     // This method filters the response body to get the recipe name and URL. Other information can be added as needed.
     private static Dictionary<String, ArrayList<String>> filterResponseBody(String responseBody) {
