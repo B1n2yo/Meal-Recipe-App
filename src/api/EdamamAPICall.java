@@ -71,8 +71,9 @@ public class EdamamAPICall {
             String calories = recipe.getString("calories");
             ArrayList<String> recipeInfoList = new ArrayList<>();
 
-            String protein = recipe.getString("protein");
+            String protein = recipe.getString("nutrients[PROCNT]");
             recipeInfoList.add(protein);
+            System.out.println(protein);
             recipeInfoList.add(url);
             recipeInfoList.add(calories);
 
