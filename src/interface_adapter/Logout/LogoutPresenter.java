@@ -1,6 +1,5 @@
 package interface_adapter.Logout;
 
-import interface_adapter.Signup.SignupState;
 import interface_adapter.ViewManagerModel;
 import use_case.Logout.LogoutOutputBoundary;
 

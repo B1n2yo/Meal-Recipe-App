@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONException;
 import entity.MealInfo;
 import entity.UserProfile;
 import entity.UserProfileFactory;
+
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -28,15 +28,9 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
     public void execute(WeeklyDietInputData weeklyDietInputData) {
         boolean switchToExerciseView = weeklyDietInputData.getSwitchToExerciseView();
         if (!switchToExerciseView) {
-            LocalDateTime now = LocalDateTime.now();
-
             String username = weeklyDietInputData.getUsername();
             UserProfile userProfile = weeklyDietDataAccessObject.getUserProfile(username);
 
-            String gender = userProfile.getGender();
-            int age = userProfile.getAge();
-            float height = userProfile.getHeight();
-            float weight = userProfile.getWeight();
             ArrayList<String> dietaryRestrictions = userProfile.getDietaryRestrictions();
             float dailyCals = userProfile.getRecommendedDailyCalories();
             double breakfastCals = 0.25 * dailyCals;
@@ -72,12 +66,10 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
                 }
                 String key = result.keys().nextElement();
                 ArrayList<String> value = result.get(key);
-                //            MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)),
-                //                    Float.parseFloat(value.get(2)), Float.parseFloat(value.get(3)), Float.parseFloat(value.get(4)),
-                //                    Float.parseFloat(value.get(5)), Float.parseFloat(value.get(6)), Float.parseFloat(value.get(7)),
-                //                    Float.parseFloat(value.get(8)), value.get(9).split(","));
+                System.out.println(value);
 
-                MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)));
+                MealInfo recipe = new MealInfo(key, value.get(0), Float.parseFloat(value.get(1)),
+                        Float.parseFloat(value.get(2)));
 
                 if (!weeklyDietDataAccessObject.recipeSaved(recipe.getName(), userProfile)) {
                     if (mealTypeInt < 3) {
@@ -91,8 +83,7 @@ public class WeeklyDietInteractor implements WeeklyDietInputBoundary {
 
             } while (weeklyDiet.size() < 21);
 
-            WeeklyDietOutputData weeklyDietOutputData = new WeeklyDietOutputData(weeklyDiet, now.toString(),
-                    userProfile, false);
+            WeeklyDietOutputData weeklyDietOutputData = new WeeklyDietOutputData(weeklyDiet, userProfile);
             weeklyDietPresenter.prepareSuccessViewRecipe(weeklyDietOutputData);
         } else {
             String username = weeklyDietInputData.getUsername();

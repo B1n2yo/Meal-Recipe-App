@@ -8,9 +8,6 @@ import interface_adapter.ViewManagerModel;
 import use_case.WeeklyDiet.WeeklyDietOutputBoundary;
 import use_case.WeeklyDiet.WeeklyDietOutputData;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class WeeklyDietPresenter implements WeeklyDietOutputBoundary {
 
     private final LoggedInViewModel loggedInViewModel;
@@ -26,9 +23,6 @@ public class WeeklyDietPresenter implements WeeklyDietOutputBoundary {
 
     @Override
     public void prepareSuccessViewRecipe(WeeklyDietOutputData response) {
-        LocalDateTime responseTime = LocalDateTime.parse(response.getCreationTime());
-        response.setCreationTime(responseTime.format(DateTimeFormatter.ofPattern("hh:mm:ss")));
-
         LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setMealPlan(response.getWeeklyDiet());
         this.loggedInViewModel.setState(loggedInState);

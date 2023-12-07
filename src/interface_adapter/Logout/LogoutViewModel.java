@@ -1,6 +1,5 @@
 package interface_adapter.Logout;
 
-import interface_adapter.Signup.SignupState;
 import interface_adapter.ViewModel;
 
 import java.beans.PropertyChangeListener;

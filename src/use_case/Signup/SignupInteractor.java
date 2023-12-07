@@ -1,4 +1,5 @@
 package use_case.Signup;
+
 import entity.UserProfile;
 import entity.UserProfileFactory;
 

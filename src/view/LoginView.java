@@ -3,8 +3,6 @@ package view;
 import interface_adapter.Login.LoginController;
 import interface_adapter.Login.LoginState;
 import interface_adapter.Login.LoginViewModel;
-import interface_adapter.Signup.SignupState;
-import interface_adapter.Signup.SignupViewModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,10 +20,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     public final String viewName = "log in";
     private final LoginViewModel loginViewModel;
     final JTextField usernameInputField = new JTextField(15);
-    private final JLabel usernameErrorField = new JLabel();
-
     final JPasswordField passwordInputField = new JPasswordField(15);
-    private final JLabel passwordErrorField = new JLabel();
 
     final JButton logIn;
     final JButton signUp;

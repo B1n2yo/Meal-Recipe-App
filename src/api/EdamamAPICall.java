@@ -42,7 +42,6 @@ public class EdamamAPICall {
                 Object value = query.get(key);
                 if (value instanceof ArrayList) {
                     ArrayList<String> health = (ArrayList<String>) value;
-                    System.out.println(health.contains(""));
                     if (health.contains("")) {
                         continue;
                     } else {
@@ -91,7 +90,6 @@ public class EdamamAPICall {
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
-        System.out.println(response);
         return filterResponseBody(response.body().string());
     }
 }
