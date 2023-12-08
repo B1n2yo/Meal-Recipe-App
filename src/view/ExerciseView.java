@@ -40,7 +40,7 @@ public class ExerciseView  extends JPanel implements ActionListener, PropertyCha
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel exerciseInfo = new LabelTextPanel(
-                new JLabel("Enter your exercise: (type of exercise performed)"),
+                new JLabel("Enter your exercise: (type of exercise performed and time/distance, e.g. ran 2 hours)"),
                 exerciseInputField);
         exerciseInfo.setForeground(FONT_COLOUR);
         exerciseInfo.setBackground(BACKGROUND_COLOUR);
